@@ -263,6 +263,34 @@
             </div>
 
 
+            <!-- Requests -->
+            <button
+                id="requests-button"
+                class="action-card requests-card"
+            >
+                <span class="action-icon">
+                    📩
+                </span>
+
+                <span class="action-text">
+                    <strong>
+                        Запити
+                    </strong>
+
+                    <small>
+                        Переглянь, хто хоче зустрітися
+                    </small>
+                </span>
+
+                <span
+                    id="requests-badge"
+                    class="requests-badge hidden"
+                >
+                    0
+                </span>
+            </button>
+
+
             <div class="home-info">
 
                 <div class="info-row">
@@ -657,6 +685,77 @@
             <div
                 id="discovery-results"
                 class="discovery-results"
+            ></div>
+
+        </div>
+    </section>
+
+
+    <!-- Incoming requests -->
+    <section id="requests-screen" class="screen">
+        <div class="screen-content requests-content">
+
+            <button
+                id="requests-back-button"
+                class="back-button"
+            >
+                ← Назад
+            </button>
+
+
+            <div class="requests-heading">
+
+                <div class="availability-icon">
+                    📩
+                </div>
+
+                <h1>
+                    Запити
+                </h1>
+
+                <p class="subtitle">
+                    Люди, які хочуть зустрітися з тобою.
+                </p>
+
+            </div>
+
+
+            <div
+                id="requests-loading"
+                class="discovery-message hidden"
+            >
+                📩 Завантажуємо запити...
+            </div>
+
+
+            <div
+                id="requests-error"
+                class="error-message hidden"
+            ></div>
+
+
+            <div
+                id="requests-empty"
+                class="discovery-empty hidden"
+            >
+                <div class="empty-icon">
+                    📭
+                </div>
+
+                <strong>
+                    Нових запитів немає
+                </strong>
+
+                <p>
+                    Коли хтось запропонує зустріч,
+                    запит з'явиться тут.
+                </p>
+            </div>
+
+
+            <div
+                id="requests-results"
+                class="requests-results"
             ></div>
 
         </div>

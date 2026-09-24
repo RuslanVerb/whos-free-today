@@ -5,6 +5,7 @@ const saveProfileButton = document.getElementById("save-profile-button");
 
 const availableButton = document.getElementById("available-button");
 const discoverButton = document.getElementById("discover-button");
+const requestsButton = document.getElementById("requests-button");
 
 const activeDiscoverButton =
     document.getElementById("active-discover-button");
@@ -24,11 +25,21 @@ const saveAvailabilityButton =
 const discoveryBackButton =
     document.getElementById("discovery-back-button");
 
+const requestsBackButton =
+    document.getElementById("requests-back-button");
 
-const welcomeScreen = document.getElementById("welcome-screen");
-const locationScreen = document.getElementById("location-screen");
-const profileScreen = document.getElementById("profile-screen");
-const homeScreen = document.getElementById("home-screen");
+
+const welcomeScreen =
+    document.getElementById("welcome-screen");
+
+const locationScreen =
+    document.getElementById("location-screen");
+
+const profileScreen =
+    document.getElementById("profile-screen");
+
+const homeScreen =
+    document.getElementById("home-screen");
 
 const availabilityScreen =
     document.getElementById("availability-screen");
@@ -36,9 +47,15 @@ const availabilityScreen =
 const discoveryScreen =
     document.getElementById("discovery-screen");
 
+const requestsScreen =
+    document.getElementById("requests-screen");
 
-const nameInput = document.getElementById("name-input");
-const ageInput = document.getElementById("age-input");
+
+const nameInput =
+    document.getElementById("name-input");
+
+const ageInput =
+    document.getElementById("age-input");
 
 const profileError =
     document.getElementById("profile-error");
@@ -68,6 +85,9 @@ const activeActivities =
 const activeTime =
     document.getElementById("active-time");
 
+const requestsBadge =
+    document.getElementById("requests-badge");
+
 
 const discoveryLoading =
     document.getElementById("discovery-loading");
@@ -80,6 +100,19 @@ const discoveryEmpty =
 
 const discoveryResults =
     document.getElementById("discovery-results");
+
+
+const requestsLoading =
+    document.getElementById("requests-loading");
+
+const requestsError =
+    document.getElementById("requests-error");
+
+const requestsEmpty =
+    document.getElementById("requests-empty");
+
+const requestsResults =
+    document.getElementById("requests-results");
 
 
 // -------------------------
@@ -103,9 +136,11 @@ const appState = {
 // -------------------------
 
 function showScreen(screen) {
-    document.querySelectorAll(".screen").forEach((item) => {
-        item.classList.remove("active");
-    });
+    document
+        .querySelectorAll(".screen")
+        .forEach((item) => {
+            item.classList.remove("active");
+        });
 
     screen.classList.add("active");
 
@@ -120,121 +155,131 @@ function showScreen(screen) {
 // Welcome
 // -------------------------
 
-startButton.addEventListener("click", () => {
-    showScreen(locationScreen);
-});
+startButton.addEventListener(
+    "click",
+    () => {
+        showScreen(locationScreen);
+    }
+);
 
 
 // -------------------------
 // Location
 // -------------------------
 
-locationButton.addEventListener("click", () => {
-    if (!navigator.geolocation) {
-        alert(
-            "Геолокація не підтримується на цьому пристрої."
-        );
-
-        return;
-    }
-
-    locationButton.disabled = true;
-
-    locationButton.textContent =
-        "📍 Визначаємо локацію...";
-
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            appState.location = {
-                latitude:
-                    position.coords.latitude,
-
-                longitude:
-                    position.coords.longitude,
-            };
-
-            console.log(
-                "Location received:",
-                appState.location
+locationButton.addEventListener(
+    "click",
+    () => {
+        if (!navigator.geolocation) {
+            alert(
+                "Геолокація не підтримується на цьому пристрої."
             );
 
-            locationButton.textContent =
-                "✅ Локацію отримано";
+            return;
+        }
 
-            openProfileScreen();
-        },
+        locationButton.disabled = true;
 
-        (error) => {
-            console.error(
-                "Geolocation error:",
-                error
-            );
+        locationButton.textContent =
+            "📍 Визначаємо локацію...";
 
-            locationButton.disabled = false;
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                appState.location = {
+                    latitude:
+                        position.coords.latitude,
 
-            locationButton.textContent =
-                "📍 Використати мою локацію";
+                    longitude:
+                        position.coords.longitude,
+                };
 
-            if (
-                error.code ===
-                error.PERMISSION_DENIED
-            ) {
-                alert(
-                    "Доступ до геолокації заборонено. " +
-                    "Дозволь доступ або обери місто вручну."
+                console.log(
+                    "Location received:",
+                    appState.location
                 );
 
-                return;
-            }
+                locationButton.textContent =
+                    "✅ Локацію отримано";
 
-            if (
-                error.code ===
-                error.POSITION_UNAVAILABLE
-            ) {
+                openProfileScreen();
+            },
+
+            (error) => {
+                console.error(
+                    "Geolocation error:",
+                    error
+                );
+
+                locationButton.disabled =
+                    false;
+
+                locationButton.textContent =
+                    "📍 Використати мою локацію";
+
+                if (
+                    error.code ===
+                    error.PERMISSION_DENIED
+                ) {
+                    alert(
+                        "Доступ до геолокації заборонено. " +
+                        "Дозволь доступ або обери місто вручну."
+                    );
+
+                    return;
+                }
+
+                if (
+                    error.code ===
+                    error.POSITION_UNAVAILABLE
+                ) {
+                    alert(
+                        "Не вдалося визначити твою локацію. " +
+                        "Спробуй ще раз або обери місто вручну."
+                    );
+
+                    return;
+                }
+
+                if (
+                    error.code ===
+                    error.TIMEOUT
+                ) {
+                    alert(
+                        "Визначення локації зайняло забагато часу. " +
+                        "Спробуй ще раз."
+                    );
+
+                    return;
+                }
+
                 alert(
-                    "Не вдалося визначити твою локацію. " +
+                    "Не вдалося визначити локацію. " +
                     "Спробуй ще раз або обери місто вручну."
                 );
+            },
 
-                return;
+            {
+                enableHighAccuracy: false,
+                timeout: 10000,
+                maximumAge: 300000,
             }
-
-            if (
-                error.code ===
-                error.TIMEOUT
-            ) {
-                alert(
-                    "Визначення локації зайняло забагато часу. " +
-                    "Спробуй ще раз."
-                );
-
-                return;
-            }
-
-            alert(
-                "Не вдалося визначити локацію. " +
-                "Спробуй ще раз або обери місто вручну."
-            );
-        },
-
-        {
-            enableHighAccuracy: false,
-            timeout: 10000,
-            maximumAge: 300000,
-        }
-    );
-});
+        );
+    }
+);
 
 
 // -------------------------
 // Manual city
 // -------------------------
 
-cityButton.addEventListener("click", () => {
-    alert(
-        "Ручний вибір міста додамо окремим кроком."
-    );
-});
+cityButton.addEventListener(
+    "click",
+    () => {
+        alert(
+            "Ручний вибір міста додамо окремим кроком."
+        );
+    }
+);
 
 
 // -------------------------
@@ -355,7 +400,8 @@ saveProfileButton.addEventListener(
                 "Не вдалося зберегти профіль.";
 
         } finally {
-            saveProfileButton.disabled = false;
+            saveProfileButton.disabled =
+                false;
 
             saveProfileButton.textContent =
                 "Продовжити →";
@@ -432,6 +478,8 @@ function openHomeScreen() {
     renderAvailabilityStatus();
 
     showScreen(homeScreen);
+
+    refreshIncomingRequestsBadge();
 }
 
 
@@ -471,6 +519,48 @@ function renderAvailabilityStatus() {
         `${getStartLabel(
             availability.start
         )} → ${availability.until}`;
+}
+
+
+// -------------------------
+// Requests badge
+// -------------------------
+
+async function refreshIncomingRequestsBadge() {
+    try {
+        const result =
+            await window.api
+                .getIncomingRequests();
+
+        const count =
+            result.count || 0;
+
+        if (count > 0) {
+            requestsBadge.textContent =
+                count > 99
+                    ? "99+"
+                    : String(count);
+
+            requestsBadge
+                .classList
+                .remove("hidden");
+
+        } else {
+            requestsBadge
+                .classList
+                .add("hidden");
+        }
+
+    } catch (error) {
+        console.error(
+            "Requests badge error:",
+            error
+        );
+
+        requestsBadge
+            .classList
+            .add("hidden");
+    }
 }
 
 
@@ -1250,7 +1340,7 @@ function formatDistance(
 
 
 // -------------------------
-// Meeting request
+// Create meeting request
 // -------------------------
 
 async function handleMeetingRequest(
@@ -1296,6 +1386,383 @@ async function handleMeetingRequest(
         alert(
             error.message ||
             "Не вдалося надіслати запит."
+        );
+    }
+}
+
+
+// -------------------------
+// Requests navigation
+// -------------------------
+
+requestsButton.addEventListener(
+    "click",
+    async () => {
+        showScreen(
+            requestsScreen
+        );
+
+        await loadIncomingRequests();
+    }
+);
+
+
+requestsBackButton.addEventListener(
+    "click",
+    () => {
+        openHomeScreen();
+    }
+);
+
+
+// -------------------------
+// Load incoming requests
+// -------------------------
+
+async function loadIncomingRequests() {
+    requestsLoading
+        .classList
+        .remove("hidden");
+
+    requestsError
+        .classList
+        .add("hidden");
+
+    requestsEmpty
+        .classList
+        .add("hidden");
+
+    requestsResults.innerHTML = "";
+
+    try {
+        const result =
+            await window.api
+                .getIncomingRequests();
+
+        const incomingRequests =
+            result.requests || [];
+
+        updateRequestsBadge(
+            incomingRequests.length
+        );
+
+        if (
+            incomingRequests.length === 0
+        ) {
+            requestsEmpty
+                .classList
+                .remove("hidden");
+
+            return;
+        }
+
+        renderIncomingRequests(
+            incomingRequests
+        );
+
+    } catch (error) {
+        console.error(
+            "Incoming requests error:",
+            error
+        );
+
+        requestsError.textContent =
+            error.message ||
+            "Не вдалося завантажити запити.";
+
+        requestsError
+            .classList
+            .remove("hidden");
+
+    } finally {
+        requestsLoading
+            .classList
+            .add("hidden");
+    }
+}
+
+
+function updateRequestsBadge(
+    count
+) {
+    if (count > 0) {
+        requestsBadge.textContent =
+            count > 99
+                ? "99+"
+                : String(count);
+
+        requestsBadge
+            .classList
+            .remove("hidden");
+
+    } else {
+        requestsBadge
+            .classList
+            .add("hidden");
+    }
+}
+
+
+// -------------------------
+// Render incoming requests
+// -------------------------
+
+function renderIncomingRequests(
+    incomingRequests
+) {
+    requestsResults.innerHTML = "";
+
+    incomingRequests.forEach(
+        (meetingRequest) => {
+            const card =
+                createRequestCard(
+                    meetingRequest
+                );
+
+            requestsResults.appendChild(
+                card
+            );
+        }
+    );
+}
+
+
+function createRequestCard(
+    meetingRequest
+) {
+    const card =
+        document.createElement("article");
+
+    card.className =
+        "request-card";
+
+
+    const person =
+        document.createElement("div");
+
+    person.className =
+        "request-person";
+
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className =
+        "request-avatar";
+
+    avatar.textContent =
+        "👤";
+
+
+    const info =
+        document.createElement("div");
+
+
+    const name =
+        document.createElement("p");
+
+    name.className =
+        "request-name";
+
+    name.textContent =
+        `${meetingRequest.sender.name}, ` +
+        `${meetingRequest.sender.age}`;
+
+
+    const description =
+        document.createElement("p");
+
+    description.className =
+        "request-description";
+
+    description.textContent =
+        "Хоче зустрітися з тобою";
+
+
+    info.appendChild(
+        name
+    );
+
+    info.appendChild(
+        description
+    );
+
+    person.appendChild(
+        avatar
+    );
+
+    person.appendChild(
+        info
+    );
+
+
+    const actions =
+        document.createElement("div");
+
+    actions.className =
+        "request-actions";
+
+
+    const acceptButton =
+        document.createElement("button");
+
+    acceptButton.type =
+        "button";
+
+    acceptButton.className =
+        "request-accept-button";
+
+    acceptButton.textContent =
+        "✅ Прийняти";
+
+
+    const rejectButton =
+        document.createElement("button");
+
+    rejectButton.type =
+        "button";
+
+    rejectButton.className =
+        "request-reject-button";
+
+    rejectButton.textContent =
+        "❌ Відхилити";
+
+
+    acceptButton.addEventListener(
+        "click",
+        () => {
+            handleIncomingRequest(
+                meetingRequest,
+                "accept",
+                card,
+                acceptButton,
+                rejectButton
+            );
+        }
+    );
+
+
+    rejectButton.addEventListener(
+        "click",
+        () => {
+            handleIncomingRequest(
+                meetingRequest,
+                "reject",
+                card,
+                acceptButton,
+                rejectButton
+            );
+        }
+    );
+
+
+    actions.appendChild(
+        acceptButton
+    );
+
+    actions.appendChild(
+        rejectButton
+    );
+
+
+    card.appendChild(
+        person
+    );
+
+    card.appendChild(
+        actions
+    );
+
+    return card;
+}
+
+
+// -------------------------
+// Accept / reject request
+// -------------------------
+
+async function handleIncomingRequest(
+    meetingRequest,
+    action,
+    card,
+    acceptButton,
+    rejectButton
+) {
+    acceptButton.disabled = true;
+    rejectButton.disabled = true;
+
+    if (action === "accept") {
+        acceptButton.textContent =
+            "Приймаємо...";
+    } else {
+        rejectButton.textContent =
+            "Відхиляємо...";
+    }
+
+    try {
+        if (action === "accept") {
+            await window.api
+                .acceptMeetingRequest(
+                    meetingRequest.id
+                );
+
+        } else {
+            await window.api
+                .rejectMeetingRequest(
+                    meetingRequest.id
+                );
+        }
+
+
+        const resultMessage =
+            document.createElement("p");
+
+        resultMessage.className =
+            "request-result";
+
+        if (action === "accept") {
+            resultMessage.textContent =
+                "✅ Запит прийнято";
+        } else {
+            resultMessage.textContent =
+                "❌ Запит відхилено";
+        }
+
+
+        const actions =
+            card.querySelector(
+                ".request-actions"
+            );
+
+        if (actions) {
+            actions.remove();
+        }
+
+        card.appendChild(
+            resultMessage
+        );
+
+        await refreshIncomingRequestsBadge();
+
+    } catch (error) {
+        console.error(
+            "Request action error:",
+            error
+        );
+
+        acceptButton.disabled = false;
+        rejectButton.disabled = false;
+
+        acceptButton.textContent =
+            "✅ Прийняти";
+
+        rejectButton.textContent =
+            "❌ Відхилити";
+
+        alert(
+            error.message ||
+            "Не вдалося обробити запит."
         );
     }
 }

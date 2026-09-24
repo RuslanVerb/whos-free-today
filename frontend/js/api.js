@@ -189,7 +189,7 @@ async function getDiscovery(
 
 
 // -------------------------
-// Meeting request
+// Create meeting request
 // -------------------------
 
 async function createMeetingRequest(
@@ -209,6 +209,61 @@ async function createMeetingRequest(
 
 
 // -------------------------
+// Incoming meeting requests
+// -------------------------
+
+async function getIncomingRequests() {
+    const initData =
+        getTelegramInitData();
+
+    return apiRequest(
+        "/requests/incoming",
+        {
+            init_data: initData,
+        }
+    );
+}
+
+
+// -------------------------
+// Accept meeting request
+// -------------------------
+
+async function acceptMeetingRequest(
+    requestId
+) {
+    const initData =
+        getTelegramInitData();
+
+    return apiRequest(
+        `/requests/${requestId}/accept`,
+        {
+            init_data: initData,
+        }
+    );
+}
+
+
+// -------------------------
+// Reject meeting request
+// -------------------------
+
+async function rejectMeetingRequest(
+    requestId
+) {
+    const initData =
+        getTelegramInitData();
+
+    return apiRequest(
+        `/requests/${requestId}/reject`,
+        {
+            init_data: initData,
+        }
+    );
+}
+
+
+// -------------------------
 // Public API
 // -------------------------
 
@@ -219,4 +274,7 @@ window.api = {
     stopAvailability,
     getDiscovery,
     createMeetingRequest,
+    getIncomingRequests,
+    acceptMeetingRequest,
+    rejectMeetingRequest,
 };

@@ -155,14 +155,18 @@ h1 {
 .danger-button:active,
 .action-card:active,
 .choice-button:active,
-.meet-button:active {
+.meet-button:active,
+.request-accept-button:active,
+.request-reject-button:active {
     transform: scale(0.98);
 }
 
 .primary-button:disabled,
 .secondary-button:disabled,
 .danger-button:disabled,
-.meet-button:disabled {
+.meet-button:disabled,
+.request-accept-button:disabled,
+.request-reject-button:disabled {
     opacity: 0.6;
     cursor: default;
 }
@@ -273,6 +277,8 @@ h1 {
 }
 
 .action-card {
+    position: relative;
+
     width: 100%;
 
     display: flex;
@@ -304,6 +310,10 @@ h1 {
         var(--tg-theme-button-color, #2481cc);
 }
 
+.requests-card {
+    margin-top: 14px;
+}
+
 .action-icon {
     flex-shrink: 0;
 
@@ -327,6 +337,31 @@ h1 {
 
     color:
         var(--tg-theme-hint-color, #707579);
+}
+
+
+/* -------------------------
+   Requests badge
+------------------------- */
+
+.requests-badge {
+    min-width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-left: auto;
+    padding: 0 7px;
+
+    border-radius: 12px;
+
+    background: #d93025;
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
 }
 
 
@@ -501,6 +536,7 @@ h1 {
 
 .activity-grid {
     display: grid;
+
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
@@ -622,7 +658,9 @@ h1 {
 }
 
 
-/* Radius */
+/* -------------------------
+   Radius
+------------------------- */
 
 .radius-options {
     display: grid;
@@ -642,7 +680,9 @@ h1 {
 }
 
 
-/* Discovery activity filters */
+/* -------------------------
+   Discovery activity filters
+------------------------- */
 
 .discovery-activity-options {
     display: flex;
@@ -662,7 +702,9 @@ h1 {
 }
 
 
-/* Loading */
+/* -------------------------
+   Loading
+------------------------- */
 
 .discovery-message {
     width: 100%;
@@ -682,7 +724,9 @@ h1 {
 }
 
 
-/* Empty */
+/* -------------------------
+   Empty state
+------------------------- */
 
 .discovery-empty {
     width: 100%;
@@ -723,7 +767,9 @@ h1 {
 }
 
 
-/* Results */
+/* -------------------------
+   Discovery results
+------------------------- */
 
 .discovery-results {
     width: 100%;
@@ -737,7 +783,9 @@ h1 {
 }
 
 
-/* Person card */
+/* -------------------------
+   Person card
+------------------------- */
 
 .person-card {
     width: 100%;
@@ -817,7 +865,9 @@ h1 {
 }
 
 
-/* Person activities */
+/* -------------------------
+   Person activities
+------------------------- */
 
 .person-activities {
     display: flex;
@@ -839,9 +889,6 @@ h1 {
     font-size: 13px;
 }
 
-
-/* Person availability */
-
 .person-until {
     display: flex;
     align-items: center;
@@ -855,9 +902,6 @@ h1 {
     color:
         var(--tg-theme-hint-color, #707579);
 }
-
-
-/* Meet button */
 
 .meet-button {
     width: 100%;
@@ -877,6 +921,147 @@ h1 {
     font-weight: 600;
 
     cursor: pointer;
+}
+
+
+/* -------------------------
+   Requests screen
+------------------------- */
+
+.requests-content {
+    justify-content: flex-start;
+    align-items: stretch;
+
+    padding-bottom: 32px;
+
+    text-align: left;
+}
+
+.requests-heading {
+    text-align: center;
+}
+
+.requests-heading .subtitle {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.requests-results {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 14px;
+
+    margin-top: 24px;
+}
+
+
+/* -------------------------
+   Request card
+------------------------- */
+
+.request-card {
+    width: 100%;
+
+    padding: 18px;
+
+    border:
+        1px solid
+        var(--tg-theme-hint-color, #d0d0d0);
+
+    border-radius: 18px;
+
+    background:
+        var(--tg-theme-secondary-bg-color, #f4f4f5);
+}
+
+.request-person {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+.request-avatar {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        var(--tg-theme-bg-color, #ffffff);
+
+    font-size: 24px;
+}
+
+.request-name {
+    margin: 0 0 4px;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.request-description {
+    margin: 0;
+
+    font-size: 14px;
+
+    color:
+        var(--tg-theme-hint-color, #707579);
+}
+
+.request-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+.request-accept-button,
+.request-reject-button {
+    width: 100%;
+
+    padding: 13px 10px;
+
+    border-radius: 13px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.request-accept-button {
+    border: 0;
+
+    background: #34a853;
+    color: #ffffff;
+}
+
+.request-reject-button {
+    border: 1px solid #d93025;
+
+    background: transparent;
+    color: #d93025;
+}
+
+.request-result {
+    margin: 8px 0 0;
+
+    font-size: 14px;
+    font-weight: 600;
 }
 
 
