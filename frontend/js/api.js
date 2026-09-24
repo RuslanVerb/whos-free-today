@@ -16,6 +16,22 @@ function getTelegramInitData() {
 }
 
 
+function getUserTimezone() {
+    const timezone =
+        Intl.DateTimeFormat()
+            .resolvedOptions()
+            .timeZone;
+
+    if (!timezone) {
+        throw new Error(
+            "Не вдалося визначити часовий пояс."
+        );
+    }
+
+    return timezone;
+}
+
+
 async function apiRequest(
     url,
     body
@@ -94,6 +110,9 @@ async function saveAvailability(
     const initData =
         getTelegramInitData();
 
+    const timezoneName =
+        getUserTimezone();
+
     return apiRequest(
         "/availability",
         {
@@ -101,10 +120,14 @@ async function saveAvailability(
 
             activities,
 
-            start_type: startType,
+            start_type:
+                startType,
 
             available_until:
                 availableUntil,
+
+            timezone_name:
+                timezoneName,
         }
     );
 }

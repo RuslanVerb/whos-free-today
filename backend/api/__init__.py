@@ -3,6 +3,7 @@ import hmac
 import json
 import os
 import time
+from datetime import datetime, timezone
 from urllib.parse import parse_qsl
 
 from dotenv import load_dotenv
@@ -13,6 +14,9 @@ from sqlalchemy.orm import Session
 
 from backend.database import get_db
 from backend.models import Availability, User
+from backend.services.availability import (
+    calculate_availability_window,
+)
 
 
 load_dotenv()
@@ -76,6 +80,11 @@ class AvailabilityRequest(BaseModel):
     available_until: str = Field(
         min_length=5,
         max_length=5,
+    )
+
+    timezone_name: str = Field(
+        min_length=1,
+        max_length=100,
     )
 
 
@@ -283,10 +292,29 @@ def save_availability(
         db,
     )
 
+    try:
+        starts_at, expires_at = (
+            calculate_availability_window(
+                start_type=payload.start_type,
+                available_until=payload.available_until,
+                timezone_name=payload.timezone_name,
+            )
+        )
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error),
+        )
+
     availability = db.scalar(
-        select(Availability).where(
+        select(Availability)
+        .where(
             Availability.user_id == user.id,
             Availability.is_active.is_(True),
+        )
+        .order_by(
+            Availability.id.desc()
         )
     )
 
@@ -301,6 +329,8 @@ def save_availability(
             activities=activities,
             start_type=payload.start_type,
             available_until=payload.available_until,
+            starts_at=starts_at,
+            expires_at=expires_at,
             is_active=True,
         )
 
@@ -308,12 +338,23 @@ def save_availability(
 
     else:
         availability.activities = activities
+
         availability.start_type = (
             payload.start_type
         )
+
         availability.available_until = (
             payload.available_until
         )
+
+        availability.starts_at = (
+            starts_at
+        )
+
+        availability.expires_at = (
+            expires_at
+        )
+
         availability.is_active = True
 
     db.commit()
@@ -327,6 +368,16 @@ def save_availability(
             "start_type": availability.start_type,
             "available_until": (
                 availability.available_until
+            ),
+            "starts_at": (
+                availability.starts_at.isoformat()
+                if availability.starts_at
+                else None
+            ),
+            "expires_at": (
+                availability.expires_at.isoformat()
+                if availability.expires_at
+                else None
             ),
             "is_active": availability.is_active,
         },
@@ -367,6 +418,36 @@ def get_current_availability(
             "availability": None,
         }
 
+    now = datetime.now(
+        timezone.utc
+    )
+
+    # Old records created before starts_at/expires_at
+    # were introduced are no longer reliable.
+    if (
+        availability.starts_at is None
+        or availability.expires_at is None
+    ):
+        availability.is_active = False
+
+        db.commit()
+
+        return {
+            "status": "ok",
+            "availability": None,
+        }
+
+    # Automatically deactivate expired availability.
+    if availability.expires_at <= now:
+        availability.is_active = False
+
+        db.commit()
+
+        return {
+            "status": "ok",
+            "availability": None,
+        }
+
     return {
         "status": "ok",
         "availability": {
@@ -375,6 +456,12 @@ def get_current_availability(
             "start_type": availability.start_type,
             "available_until": (
                 availability.available_until
+            ),
+            "starts_at": (
+                availability.starts_at.isoformat()
+            ),
+            "expires_at": (
+                availability.expires_at.isoformat()
             ),
             "is_active": availability.is_active,
         },
