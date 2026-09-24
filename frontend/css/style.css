@@ -20,67 +20,22 @@ body {
     color: var(--tg-theme-text-color, #111111);
 }
 
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .app {
     min-height: 100vh;
     padding: 24px;
 }
 
-.welcome {
-    min-height: calc(100vh - 48px);
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
-}
-
-.logo {
-    font-size: 64px;
-    margin-bottom: 20px;
-}
-
-h1 {
-    margin: 0 0 12px;
-    font-size: 32px;
-}
-
-.subtitle {
-    max-width: 320px;
-
-    margin: 0 0 32px;
-
-    font-size: 17px;
-    line-height: 1.5;
-
-    color: var(--tg-theme-hint-color, #707579);
-}
-
-.primary-button {
-    width: 100%;
-    max-width: 320px;
-
-    border: 0;
-    border-radius: 14px;
-
-    padding: 16px 20px;
-
-    font-size: 17px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    background:
-        var(--tg-theme-button-color, #2481cc);
-
-    color:
-        var(--tg-theme-button-text-color, #ffffff);
-}
-
-.primary-button:active {
-    transform: scale(0.98);
-}
+/* Screens */
 
 .screen {
     display: none;
@@ -93,6 +48,9 @@ h1 {
 
 .screen-content {
     width: 100%;
+    max-width: 420px;
+
+    margin: 0 auto;
 
     display: flex;
     flex-direction: column;
@@ -102,29 +60,87 @@ h1 {
     text-align: center;
 }
 
+
+/* Typography */
+
+.logo {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0 0 12px;
+
+    font-size: 32px;
+    line-height: 1.15;
+}
+
+.subtitle {
+    width: 100%;
+    max-width: 340px;
+
+    margin: 0 0 32px;
+
+    font-size: 17px;
+    line-height: 1.5;
+
+    color: var(--tg-theme-hint-color, #707579);
+}
+
+
+/* Buttons */
+
+.primary-button,
 .secondary-button {
     width: 100%;
     max-width: 320px;
 
-    margin-top: 12px;
-
-    border: 1px solid var(--tg-theme-button-color, #2481cc);
     border-radius: 14px;
 
-    padding: 15px 20px;
+    padding: 16px 20px;
 
     font-size: 17px;
     font-weight: 600;
 
     cursor: pointer;
+}
+
+.primary-button {
+    border: 0;
+
+    background:
+        var(--tg-theme-button-color, #2481cc);
+
+    color:
+        var(--tg-theme-button-text-color, #ffffff);
+}
+
+.secondary-button {
+    margin-top: 12px;
+
+    border:
+        1px solid
+        var(--tg-theme-button-color, #2481cc);
 
     background: transparent;
-    color: var(--tg-theme-button-color, #2481cc);
+
+    color:
+        var(--tg-theme-button-color, #2481cc);
 }
 
-.secondary-button:active {
+.primary-button:active,
+.secondary-button:active,
+.action-card:active {
     transform: scale(0.98);
 }
+
+.primary-button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+
+/* Profile form */
 
 .form {
     width: 100%;
@@ -149,43 +165,216 @@ h1 {
 
     padding: 14px 16px;
 
-    border: 1px solid var(--tg-theme-hint-color, #d0d0d0);
+    border:
+        1px solid
+        var(--tg-theme-hint-color, #d0d0d0);
+
     border-radius: 12px;
 
     font-size: 16px;
 
-    background: var(--tg-theme-secondary-bg-color, #f4f4f5);
-    color: var(--tg-theme-text-color, #111111);
+    background:
+        var(--tg-theme-secondary-bg-color, #f4f4f5);
+
+    color:
+        var(--tg-theme-text-color, #111111);
 
     outline: none;
 }
 
 .form input:focus {
-    border-color: var(--tg-theme-button-color, #2481cc);
+    border-color:
+        var(--tg-theme-button-color, #2481cc);
 }
+
+
+/* Interests */
 
 .interests {
     display: flex;
     flex-wrap: wrap;
+
     gap: 8px;
 
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 }
 
 .interest-button {
     padding: 10px 12px;
 
-    border: 1px solid var(--tg-theme-hint-color, #d0d0d0);
+    border:
+        1px solid
+        var(--tg-theme-hint-color, #d0d0d0);
+
     border-radius: 20px;
 
     background: transparent;
-    color: var(--tg-theme-text-color, #111111);
+
+    color:
+        var(--tg-theme-text-color, #111111);
 
     cursor: pointer;
 }
 
 .interest-button.selected {
-    border-color: var(--tg-theme-button-color, #2481cc);
-    background: var(--tg-theme-button-color, #2481cc);
-    color: var(--tg-theme-button-text-color, #ffffff);
+    border-color:
+        var(--tg-theme-button-color, #2481cc);
+
+    background:
+        var(--tg-theme-button-color, #2481cc);
+
+    color:
+        var(--tg-theme-button-text-color, #ffffff);
+}
+
+
+/* Validation */
+
+.error-message {
+    min-height: 20px;
+
+    margin: 8px 0 12px;
+
+    font-size: 14px;
+
+    color: #d93025;
+}
+
+
+/* Home */
+
+.home-header {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 8px;
+
+    text-align: left;
+}
+
+.home-label {
+    margin: 0 0 6px;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    color:
+        var(--tg-theme-hint-color, #707579);
+}
+
+.home-actions {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+.action-card {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 20px;
+
+    border:
+        1px solid
+        var(--tg-theme-hint-color, #d0d0d0);
+
+    border-radius: 18px;
+
+    background:
+        var(--tg-theme-secondary-bg-color, #f4f4f5);
+
+    color:
+        var(--tg-theme-text-color, #111111);
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.available-card {
+    border-color:
+        var(--tg-theme-button-color, #2481cc);
+}
+
+.action-icon {
+    font-size: 32px;
+}
+
+.action-text {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.action-text strong {
+    font-size: 17px;
+}
+
+.action-text small {
+    font-size: 14px;
+    line-height: 1.35;
+
+    color:
+        var(--tg-theme-hint-color, #707579);
+}
+
+
+/* Home information */
+
+.home-info {
+    width: 100%;
+
+    margin-top: 24px;
+
+    padding: 16px;
+
+    border-radius: 16px;
+
+    background:
+        var(--tg-theme-secondary-bg-color, #f4f4f5);
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 7px 0;
+
+    font-size: 14px;
+
+    text-align: left;
+}
+
+
+/* Smaller screens */
+
+@media (max-height: 700px) {
+    .screen-content {
+        justify-content: flex-start;
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+
+    .logo {
+        font-size: 48px;
+        margin-bottom: 12px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
 }

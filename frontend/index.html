@@ -2,6 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -15,11 +16,13 @@
 </head>
 
 <body>
+
     <main class="app">
 
         <!-- Welcome -->
         <section id="welcome-screen" class="screen active">
             <div class="screen-content">
+
                 <div class="logo">👋</div>
 
                 <h1>Who's Free Today?</h1>
@@ -31,6 +34,7 @@
                 <button id="start-button" class="primary-button">
                     🟢 Почати
                 </button>
+
             </div>
         </section>
 
@@ -38,6 +42,7 @@
         <!-- Location -->
         <section id="location-screen" class="screen">
             <div class="screen-content">
+
                 <div class="logo">📍</div>
 
                 <h1>Де ти зараз?</h1>
@@ -54,60 +59,205 @@
                 <button id="city-button" class="secondary-button">
                     🌍 Обрати місто вручну
                 </button>
+
             </div>
         </section>
-<!-- Profile -->
-<section id="profile-screen" class="screen">
-    <div class="screen-content">
-        <div class="logo">👤</div>
 
-        <h1>Розкажи про себе</h1>
 
-        <p class="subtitle">
-            Це допоможе іншим зрозуміти, з ким вони можуть зустрітися.
-        </p>
+        <!-- Profile -->
+        <section id="profile-screen" class="screen">
+            <div class="screen-content">
 
-        <div class="form">
-            <label for="name-input">Ім'я</label>
-            <input
-                id="name-input"
-                type="text"
-                placeholder="Твоє ім'я"
-                maxlength="50"
-            >
+                <div class="logo">👤</div>
 
-            <label for="age-input">Вік</label>
-            <input
-                id="age-input"
-                type="number"
-                placeholder="Наприклад, 25"
-                min="18"
-                max="100"
-            >
+                <h1>Розкажи про себе</h1>
 
-            <p class="form-label">Що тобі цікаво?</p>
+                <p class="subtitle">
+                    Це допоможе іншим зрозуміти,
+                    з ким вони можуть зустрітися.
+                </p>
 
-            <div class="interests">
-                <button type="button" class="interest-button">☕ Кава</button>
-                <button type="button" class="interest-button">🍺 Бар</button>
-                <button type="button" class="interest-button">🚶 Прогулянка</button>
-                <button type="button" class="interest-button">🎮 Ігри</button>
-                <button type="button" class="interest-button">🎬 Кіно</button>
-                <button type="button" class="interest-button">🏃 Спорт</button>
-                <button type="button" class="interest-button">🍕 Їжа</button>
-                <button type="button" class="interest-button">💬 Поспілкуватися</button>
+                <div class="form">
+
+                    <label for="name-input">
+                        Ім'я
+                    </label>
+
+                    <input
+                        id="name-input"
+                        type="text"
+                        placeholder="Твоє ім'я"
+                        maxlength="50"
+                    >
+
+
+                    <label for="age-input">
+                        Вік
+                    </label>
+
+                    <input
+                        id="age-input"
+                        type="number"
+                        placeholder="Наприклад, 25"
+                        min="18"
+                        max="100"
+                    >
+
+
+                    <p class="form-label">
+                        Що тобі цікаво?
+                    </p>
+
+                    <div class="interests">
+
+                        <button type="button" class="interest-button">
+                            ☕ Кава
+                        </button>
+
+                        <button type="button" class="interest-button">
+                            🍺 Бар
+                        </button>
+
+                        <button type="button" class="interest-button">
+                            🚶 Прогулянка
+                        </button>
+
+                        <button type="button" class="interest-button">
+                            🎮 Ігри
+                        </button>
+
+                        <button type="button" class="interest-button">
+                            🎬 Кіно
+                        </button>
+
+                        <button type="button" class="interest-button">
+                            🏃 Спорт
+                        </button>
+
+                        <button type="button" class="interest-button">
+                            🍕 Їжа
+                        </button>
+
+                        <button type="button" class="interest-button">
+                            💬 Поспілкуватися
+                        </button>
+
+                    </div>
+
+
+                    <p
+                        id="profile-error"
+                        class="error-message"
+                    ></p>
+
+
+                    <button
+                        id="save-profile-button"
+                        class="primary-button"
+                    >
+                        Продовжити →
+                    </button>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Home -->
+        <section id="home-screen" class="screen">
+
+            <div class="screen-content">
+
+                <div class="home-header">
+
+                    <div>
+                        <p class="home-label">
+                            WHO'S FREE TODAY?
+                        </p>
+
+                        <h1 id="home-greeting">
+                            👋 Привіт!
+                        </h1>
+                    </div>
+
+                </div>
+
+
+                <p class="subtitle">
+                    Що хочеш зробити сьогодні?
+                </p>
+
+
+                <div class="home-actions">
+
+                    <button
+                        id="available-button"
+                        class="action-card available-card"
+                    >
+                        <span class="action-icon">
+                            🟢
+                        </span>
+
+                        <span class="action-text">
+                            <strong>
+                                Я вільний сьогодні
+                            </strong>
+
+                            <small>
+                                Покажи іншим, що ти готовий зустрітися
+                            </small>
+                        </span>
+                    </button>
+
+
+                    <button
+                        id="discover-button"
+                        class="action-card"
+                    >
+                        <span class="action-icon">
+                            👥
+                        </span>
+
+                        <span class="action-text">
+                            <strong>
+                                Хто вільний поруч?
+                            </strong>
+
+                            <small>
+                                Знайди людей, які теж хочуть зустрітися
+                            </small>
+                        </span>
+                    </button>
+
+                </div>
+
+
+                <div class="home-info">
+
+                    <div class="info-row">
+                        <span>📍</span>
+                        <span>Локацію визначено</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>👤</span>
+                        <span id="profile-summary">
+                            Профіль готовий
+                        </span>
+                    </div>
+
+                </div>
+
             </div>
 
-            <button id="save-profile-button" class="primary-button">
-                Продовжити →
-            </button>
-        </div>
-    </div>
-</section>
+        </section>
 
     </main>
 
+
     <script src="/static/js/telegram.js"></script>
     <script src="/static/js/app.js"></script>
+
 </body>
 </html>
