@@ -16,19 +16,47 @@
 
 <body>
     <main class="app">
-        <section class="welcome">
-            <div class="logo">👋</div>
 
-            <h1>Who's Free Today?</h1>
+        <!-- Welcome -->
+        <section id="welcome-screen" class="screen active">
+            <div class="screen-content">
+                <div class="logo">👋</div>
 
-            <p class="subtitle">
-                Знайди людей поруч, які теж вільні сьогодні.
-            </p>
+                <h1>Who's Free Today?</h1>
 
-            <button id="start-button" class="primary-button">
-                🟢 Почати
-            </button>
+                <p class="subtitle">
+                    Знайди людей поруч, які теж вільні сьогодні.
+                </p>
+
+                <button id="start-button" class="primary-button">
+                    🟢 Почати
+                </button>
+            </div>
         </section>
+
+
+        <!-- Location -->
+        <section id="location-screen" class="screen">
+            <div class="screen-content">
+                <div class="logo">📍</div>
+
+                <h1>Де ти зараз?</h1>
+
+                <p class="subtitle">
+                    Локація допоможе знайти людей поблизу.
+                    Точну адресу ми не показуватимемо.
+                </p>
+
+                <button id="location-button" class="primary-button">
+                    📍 Використати мою локацію
+                </button>
+
+                <button id="city-button" class="secondary-button">
+                    🌍 Обрати місто вручну
+                </button>
+            </div>
+        </section>
+
     </main>
 
     <script src="/static/js/telegram.js"></script>
