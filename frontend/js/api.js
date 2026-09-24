@@ -84,7 +84,6 @@ async function saveTelegramProfile(
         "/auth/telegram",
         {
             init_data: initData,
-
             name,
             age,
 
@@ -168,6 +167,28 @@ async function stopAvailability() {
 
 
 // -------------------------
+// Discovery
+// -------------------------
+
+async function getDiscovery(
+    radiusKm = 25,
+    activity = null
+) {
+    const initData =
+        getTelegramInitData();
+
+    return apiRequest(
+        "/discovery",
+        {
+            init_data: initData,
+            radius_km: radiusKm,
+            activity,
+        }
+    );
+}
+
+
+// -------------------------
 // Public API
 // -------------------------
 
@@ -176,4 +197,5 @@ window.api = {
     saveAvailability,
     getCurrentAvailability,
     stopAvailability,
+    getDiscovery,
 };

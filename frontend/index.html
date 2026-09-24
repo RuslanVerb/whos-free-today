@@ -466,6 +466,202 @@
         </div>
     </section>
 
+
+    <!-- Discovery -->
+    <section id="discovery-screen" class="screen">
+        <div class="screen-content discovery-content">
+
+            <button
+                id="discovery-back-button"
+                class="back-button"
+            >
+                ← Назад
+            </button>
+
+
+            <div class="discovery-heading">
+
+                <div class="availability-icon">
+                    👥
+                </div>
+
+                <h1>
+                    Хто вільний поруч?
+                </h1>
+
+                <p class="subtitle">
+                    Люди, які доступні для зустрічі прямо зараз.
+                </p>
+
+            </div>
+
+
+            <div class="discovery-filters">
+
+                <p class="section-label">
+                    Радіус пошуку
+                </p>
+
+                <div class="radius-options">
+
+                    <button
+                        type="button"
+                        class="choice-button radius-button"
+                        data-radius="5"
+                    >
+                        5 км
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button radius-button"
+                        data-radius="10"
+                    >
+                        10 км
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button radius-button selected"
+                        data-radius="25"
+                    >
+                        25 км
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button radius-button"
+                        data-radius="50"
+                    >
+                        50 км
+                    </button>
+
+                </div>
+
+
+                <p class="section-label">
+                    Що хочеш робити?
+                </p>
+
+                <div class="discovery-activity-options">
+
+                    <button
+                        type="button"
+                        class="choice-button discovery-activity-button selected"
+                        data-activity=""
+                    >
+                        Усі
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button discovery-activity-button"
+                        data-activity="coffee"
+                    >
+                        ☕ Кава
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button discovery-activity-button"
+                        data-activity="bar"
+                    >
+                        🍺 Бар
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button discovery-activity-button"
+                        data-activity="walk"
+                    >
+                        🚶 Прогулянка
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button discovery-activity-button"
+                        data-activity="food"
+                    >
+                        🍕 Поїсти
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button discovery-activity-button"
+                        data-activity="cinema"
+                    >
+                        🎬 Кіно
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button discovery-activity-button"
+                        data-activity="sport"
+                    >
+                        🏃 Спорт
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button discovery-activity-button"
+                        data-activity="games"
+                    >
+                        🎮 Ігри
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button discovery-activity-button"
+                        data-activity="chat"
+                    >
+                        💬 Поспілкуватися
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="discovery-loading"
+                class="discovery-message hidden"
+            >
+                🔎 Шукаємо людей поруч...
+            </div>
+
+
+            <div
+                id="discovery-error"
+                class="error-message hidden"
+            ></div>
+
+
+            <div
+                id="discovery-empty"
+                class="discovery-empty hidden"
+            >
+                <div class="empty-icon">
+                    👀
+                </div>
+
+                <strong>
+                    Поки нікого немає
+                </strong>
+
+                <p>
+                    Спробуй збільшити радіус або обрати інше заняття.
+                </p>
+            </div>
+
+
+            <div
+                id="discovery-results"
+                class="discovery-results"
+            ></div>
+
+        </div>
+    </section>
+
 </main>
 
 

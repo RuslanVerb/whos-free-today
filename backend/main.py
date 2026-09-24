@@ -4,7 +4,8 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from backend.api import router as auth_router
+from backend.api import router as api_router
+from backend.api.discovery import router as discovery_router
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,7 +18,8 @@ app = FastAPI(
 )
 
 
-app.include_router(auth_router)
+app.include_router(api_router)
+app.include_router(discovery_router)
 
 
 app.mount(
@@ -29,7 +31,9 @@ app.mount(
 
 @app.get("/", include_in_schema=False)
 async def mini_app():
-    return FileResponse(FRONTEND_DIR / "index.html")
+    return FileResponse(
+        FRONTEND_DIR / "index.html"
+    )
 
 
 @app.get("/health")

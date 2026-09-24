@@ -21,6 +21,9 @@ const availabilityBackButton =
 const saveAvailabilityButton =
     document.getElementById("save-availability-button");
 
+const discoveryBackButton =
+    document.getElementById("discovery-back-button");
+
 
 const welcomeScreen = document.getElementById("welcome-screen");
 const locationScreen = document.getElementById("location-screen");
@@ -30,11 +33,15 @@ const homeScreen = document.getElementById("home-screen");
 const availabilityScreen =
     document.getElementById("availability-screen");
 
+const discoveryScreen =
+    document.getElementById("discovery-screen");
+
 
 const nameInput = document.getElementById("name-input");
 const ageInput = document.getElementById("age-input");
 
-const profileError = document.getElementById("profile-error");
+const profileError =
+    document.getElementById("profile-error");
 
 const availabilityError =
     document.getElementById("availability-error");
@@ -43,17 +50,36 @@ const availableUntilInput =
     document.getElementById("available-until");
 
 
-const homeGreeting = document.getElementById("home-greeting");
-const profileSummary = document.getElementById("profile-summary");
+const homeGreeting =
+    document.getElementById("home-greeting");
 
-const inactiveHome = document.getElementById("inactive-home");
-const activeHome = document.getElementById("active-home");
+const profileSummary =
+    document.getElementById("profile-summary");
+
+const inactiveHome =
+    document.getElementById("inactive-home");
+
+const activeHome =
+    document.getElementById("active-home");
 
 const activeActivities =
     document.getElementById("active-activities");
 
 const activeTime =
     document.getElementById("active-time");
+
+
+const discoveryLoading =
+    document.getElementById("discovery-loading");
+
+const discoveryError =
+    document.getElementById("discovery-error");
+
+const discoveryEmpty =
+    document.getElementById("discovery-empty");
+
+const discoveryResults =
+    document.getElementById("discovery-results");
 
 
 // -------------------------
@@ -64,6 +90,11 @@ const appState = {
     location: null,
     profile: null,
     availability: null,
+
+    discovery: {
+        radiusKm: 25,
+        activity: null,
+    },
 };
 
 
@@ -841,23 +872,390 @@ stopAvailabilityButton.addEventListener(
 
 
 // -------------------------
-// Discovery
+// Discovery navigation
 // -------------------------
 
-function openDiscoveryPlaceholder() {
-    alert(
-        "Discovery додамо наступним етапом."
+async function openDiscovery() {
+    showScreen(
+        discoveryScreen
     );
+
+    await loadDiscovery();
 }
 
 
 discoverButton.addEventListener(
     "click",
-    openDiscoveryPlaceholder
+    openDiscovery
 );
 
 
 activeDiscoverButton.addEventListener(
     "click",
-    openDiscoveryPlaceholder
+    openDiscovery
 );
+
+
+discoveryBackButton.addEventListener(
+    "click",
+    () => {
+        openHomeScreen();
+    }
+);
+
+
+// -------------------------
+// Discovery radius
+// -------------------------
+
+document
+    .querySelectorAll(
+        ".radius-button"
+    )
+    .forEach((button) => {
+        button.addEventListener(
+            "click",
+            async () => {
+                document
+                    .querySelectorAll(
+                        ".radius-button"
+                    )
+                    .forEach((item) => {
+                        item
+                            .classList
+                            .remove("selected");
+                    });
+
+                button
+                    .classList
+                    .add("selected");
+
+                appState.discovery.radiusKm =
+                    Number(
+                        button.dataset.radius
+                    );
+
+                await loadDiscovery();
+            }
+        );
+    });
+
+
+// -------------------------
+// Discovery activity filter
+// -------------------------
+
+document
+    .querySelectorAll(
+        ".discovery-activity-button"
+    )
+    .forEach((button) => {
+        button.addEventListener(
+            "click",
+            async () => {
+                document
+                    .querySelectorAll(
+                        ".discovery-activity-button"
+                    )
+                    .forEach((item) => {
+                        item
+                            .classList
+                            .remove("selected");
+                    });
+
+                button
+                    .classList
+                    .add("selected");
+
+                const activity =
+                    button.dataset.activity;
+
+                appState.discovery.activity =
+                    activity || null;
+
+                await loadDiscovery();
+            }
+        );
+    });
+
+
+// -------------------------
+// Load discovery
+// -------------------------
+
+async function loadDiscovery() {
+    discoveryLoading
+        .classList
+        .remove("hidden");
+
+    discoveryError
+        .classList
+        .add("hidden");
+
+    discoveryEmpty
+        .classList
+        .add("hidden");
+
+    discoveryResults.innerHTML = "";
+
+    try {
+        const result =
+            await window.api
+                .getDiscovery(
+                    appState.discovery.radiusKm,
+                    appState.discovery.activity
+                );
+
+        const people =
+            result.people || [];
+
+        if (people.length === 0) {
+            discoveryEmpty
+                .classList
+                .remove("hidden");
+
+            return;
+        }
+
+        renderDiscoveryResults(
+            people
+        );
+
+    } catch (error) {
+        console.error(
+            "Discovery error:",
+            error
+        );
+
+        discoveryError.textContent =
+            error.message ||
+            "Не вдалося завантажити людей поруч.";
+
+        discoveryError
+            .classList
+            .remove("hidden");
+
+    } finally {
+        discoveryLoading
+            .classList
+            .add("hidden");
+    }
+}
+
+
+// -------------------------
+// Render discovery
+// -------------------------
+
+function renderDiscoveryResults(
+    people
+) {
+    discoveryResults.innerHTML = "";
+
+    people.forEach((person) => {
+        const card =
+            createPersonCard(
+                person
+            );
+
+        discoveryResults.appendChild(
+            card
+        );
+    });
+}
+
+
+function createPersonCard(
+    person
+) {
+    const card =
+        document.createElement("article");
+
+    card.className =
+        "person-card";
+
+
+    const header =
+        document.createElement("div");
+
+    header.className =
+        "person-header";
+
+
+    const personMain =
+        document.createElement("div");
+
+    personMain.className =
+        "person-main";
+
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className =
+        "person-avatar";
+
+    avatar.textContent = "👤";
+
+
+    const info =
+        document.createElement("div");
+
+
+    const name =
+        document.createElement("p");
+
+    name.className =
+        "person-name";
+
+    name.textContent =
+        `${person.name}, ${person.age}`;
+
+
+    const distance =
+        document.createElement("p");
+
+    distance.className =
+        "person-distance";
+
+    distance.textContent =
+        `📍 ${formatDistance(
+            person.distance_km
+        )} від тебе`;
+
+
+    info.appendChild(name);
+    info.appendChild(distance);
+
+    personMain.appendChild(avatar);
+    personMain.appendChild(info);
+
+
+    const status =
+        document.createElement("span");
+
+    status.className =
+        "person-status";
+
+
+    header.appendChild(
+        personMain
+    );
+
+    header.appendChild(
+        status
+    );
+
+
+    const activities =
+        document.createElement("div");
+
+    activities.className =
+        "person-activities";
+
+
+    (person.activities || [])
+        .forEach((activity) => {
+            const item =
+                document.createElement(
+                    "span"
+                );
+
+            item.className =
+                "person-activity";
+
+            item.textContent =
+                activity.label;
+
+            activities.appendChild(
+                item
+            );
+        });
+
+
+    const until =
+        document.createElement("p");
+
+    until.className =
+        "person-until";
+
+    until.textContent =
+        `🕐 Вільний/вільна до ${person.available_until}`;
+
+
+    const meetButton =
+        document.createElement("button");
+
+    meetButton.type =
+        "button";
+
+    meetButton.className =
+        "meet-button";
+
+    meetButton.textContent =
+        "🤝 Запропонувати зустріч";
+
+    meetButton.dataset.userId =
+        person.user_id;
+
+    meetButton.addEventListener(
+        "click",
+        () => {
+            handleMeetingRequest(
+                person
+            );
+        }
+    );
+
+
+    card.appendChild(
+        header
+    );
+
+    card.appendChild(
+        activities
+    );
+
+    card.appendChild(
+        until
+    );
+
+    card.appendChild(
+        meetButton
+    );
+
+    return card;
+}
+
+
+function formatDistance(
+    distanceKm
+) {
+    const distance =
+        Number(distanceKm);
+
+    if (!Number.isFinite(distance)) {
+        return "—";
+    }
+
+    if (distance < 1) {
+        return `${Math.round(
+            distance * 1000
+        )} м`;
+    }
+
+    return `${distance.toFixed(1)} км`;
+}
+
+
+// -------------------------
+// Meeting request placeholder
+// -------------------------
+
+function handleMeetingRequest(
+    person
+) {
+    alert(
+        `Наступним кроком додамо запит на зустріч з ${person.name}.`
+    );
+}

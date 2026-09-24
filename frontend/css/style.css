@@ -35,7 +35,9 @@ button {
 }
 
 
-/* Screens */
+/* -------------------------
+   Screens
+------------------------- */
 
 .screen {
     display: none;
@@ -65,7 +67,9 @@ button {
 }
 
 
-/* Typography */
+/* -------------------------
+   Typography
+------------------------- */
 
 .logo {
     margin-bottom: 20px;
@@ -88,11 +92,14 @@ h1 {
     font-size: 17px;
     line-height: 1.5;
 
-    color: var(--tg-theme-hint-color, #707579);
+    color:
+        var(--tg-theme-hint-color, #707579);
 }
 
 
-/* Standard buttons */
+/* -------------------------
+   Standard buttons
+------------------------- */
 
 .primary-button,
 .secondary-button,
@@ -139,6 +146,7 @@ h1 {
     border: 1px solid #d93025;
 
     background: transparent;
+
     color: #d93025;
 }
 
@@ -146,17 +154,23 @@ h1 {
 .secondary-button:active,
 .danger-button:active,
 .action-card:active,
-.choice-button:active {
+.choice-button:active,
+.meet-button:active {
     transform: scale(0.98);
 }
 
-.primary-button:disabled {
+.primary-button:disabled,
+.secondary-button:disabled,
+.danger-button:disabled,
+.meet-button:disabled {
     opacity: 0.6;
     cursor: default;
 }
 
 
-/* Profile */
+/* -------------------------
+   Profile
+------------------------- */
 
 .form {
     width: 100%;
@@ -203,7 +217,9 @@ h1 {
 }
 
 
-/* Validation */
+/* -------------------------
+   Validation
+------------------------- */
 
 .error-message {
     min-height: 20px;
@@ -216,7 +232,9 @@ h1 {
 }
 
 
-/* Home */
+/* -------------------------
+   Home
+------------------------- */
 
 .home-header {
     width: 100%;
@@ -288,6 +306,7 @@ h1 {
 
 .action-icon {
     flex-shrink: 0;
+
     font-size: 32px;
 }
 
@@ -311,7 +330,9 @@ h1 {
 }
 
 
-/* Home info */
+/* -------------------------
+   Home info
+------------------------- */
 
 .home-info {
     width: 100%;
@@ -339,7 +360,9 @@ h1 {
 }
 
 
-/* Active availability */
+/* -------------------------
+   Active availability
+------------------------- */
 
 .availability-status {
     width: 100%;
@@ -402,7 +425,9 @@ h1 {
 }
 
 
-/* Availability screen */
+/* -------------------------
+   Availability screen
+------------------------- */
 
 .availability-content {
     justify-content: flex-start;
@@ -438,6 +463,7 @@ h1 {
 
 .availability-icon {
     margin-bottom: 10px;
+
     font-size: 48px;
 }
 
@@ -469,11 +495,14 @@ h1 {
 }
 
 
-/* Activities */
+/* -------------------------
+   Activities
+------------------------- */
 
 .activity-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
     gap: 10px;
 }
@@ -512,7 +541,9 @@ h1 {
 }
 
 
-/* Start time */
+/* -------------------------
+   Start time
+------------------------- */
 
 .time-options {
     display: flex;
@@ -523,11 +554,14 @@ h1 {
 
 .time-button {
     width: 100%;
+
     text-align: left;
 }
 
 
-/* Until */
+/* -------------------------
+   Until
+------------------------- */
 
 .time-input {
     width: 100%;
@@ -561,7 +595,294 @@ h1 {
 }
 
 
-/* Small screens */
+/* -------------------------
+   Discovery
+------------------------- */
+
+.discovery-content {
+    justify-content: flex-start;
+    align-items: stretch;
+
+    padding-bottom: 32px;
+
+    text-align: left;
+}
+
+.discovery-heading {
+    text-align: center;
+}
+
+.discovery-heading .subtitle {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.discovery-filters {
+    width: 100%;
+}
+
+
+/* Radius */
+
+.radius-options {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 8px;
+}
+
+.radius-button {
+    min-height: 44px;
+
+    padding: 9px 6px;
+
+    font-size: 14px;
+}
+
+
+/* Discovery activity filters */
+
+.discovery-activity-options {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.discovery-activity-button {
+    min-height: 42px;
+
+    padding: 9px 12px;
+
+    border-radius: 20px;
+
+    font-size: 14px;
+}
+
+
+/* Loading */
+
+.discovery-message {
+    width: 100%;
+
+    margin-top: 28px;
+    padding: 20px;
+
+    border-radius: 16px;
+
+    background:
+        var(--tg-theme-secondary-bg-color, #f4f4f5);
+
+    color:
+        var(--tg-theme-hint-color, #707579);
+
+    text-align: center;
+}
+
+
+/* Empty */
+
+.discovery-empty {
+    width: 100%;
+
+    margin-top: 28px;
+    padding: 28px 20px;
+
+    border-radius: 18px;
+
+    background:
+        var(--tg-theme-secondary-bg-color, #f4f4f5);
+
+    text-align: center;
+}
+
+.empty-icon {
+    margin-bottom: 12px;
+
+    font-size: 42px;
+}
+
+.discovery-empty strong {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 18px;
+}
+
+.discovery-empty p {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 1.45;
+
+    color:
+        var(--tg-theme-hint-color, #707579);
+}
+
+
+/* Results */
+
+.discovery-results {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 14px;
+
+    margin-top: 24px;
+}
+
+
+/* Person card */
+
+.person-card {
+    width: 100%;
+
+    padding: 18px;
+
+    border:
+        1px solid
+        var(--tg-theme-hint-color, #d0d0d0);
+
+    border-radius: 18px;
+
+    background:
+        var(--tg-theme-secondary-bg-color, #f4f4f5);
+}
+
+.person-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 12px;
+}
+
+.person-main {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+.person-avatar {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        var(--tg-theme-bg-color, #ffffff);
+
+    font-size: 24px;
+}
+
+.person-name {
+    margin: 0 0 3px;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.person-distance {
+    margin: 0;
+
+    font-size: 13px;
+
+    color:
+        var(--tg-theme-hint-color, #707579);
+}
+
+.person-status {
+    width: 9px;
+    height: 9px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #34a853;
+}
+
+
+/* Person activities */
+
+.person-activities {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-bottom: 13px;
+}
+
+.person-activity {
+    padding: 7px 10px;
+
+    border-radius: 16px;
+
+    background:
+        var(--tg-theme-bg-color, #ffffff);
+
+    font-size: 13px;
+}
+
+
+/* Person availability */
+
+.person-until {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin: 0 0 16px;
+
+    font-size: 14px;
+
+    color:
+        var(--tg-theme-hint-color, #707579);
+}
+
+
+/* Meet button */
+
+.meet-button {
+    width: 100%;
+
+    padding: 13px 16px;
+
+    border: 0;
+    border-radius: 13px;
+
+    background:
+        var(--tg-theme-button-color, #2481cc);
+
+    color:
+        var(--tg-theme-button-text-color, #ffffff);
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* -------------------------
+   Small screens
+------------------------- */
 
 @media (max-height: 700px) {
     .screen-content {
@@ -573,10 +894,24 @@ h1 {
 
     .logo {
         margin-bottom: 12px;
+
         font-size: 48px;
     }
 
     h1 {
         font-size: 28px;
+    }
+}
+
+
+@media (max-width: 360px) {
+    .app {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .radius-options {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
     }
 }
