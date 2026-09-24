@@ -60,12 +60,16 @@ button {
     text-align: center;
 }
 
+.hidden {
+    display: none !important;
+}
+
 
 /* Typography */
 
 .logo {
-    font-size: 64px;
     margin-bottom: 20px;
+    font-size: 64px;
 }
 
 h1 {
@@ -88,16 +92,17 @@ h1 {
 }
 
 
-/* Buttons */
+/* Standard buttons */
 
 .primary-button,
-.secondary-button {
+.secondary-button,
+.danger-button {
     width: 100%;
     max-width: 320px;
 
-    border-radius: 14px;
-
     padding: 16px 20px;
+
+    border-radius: 14px;
 
     font-size: 17px;
     font-weight: 600;
@@ -128,9 +133,20 @@ h1 {
         var(--tg-theme-button-color, #2481cc);
 }
 
+.danger-button {
+    margin-top: 12px;
+
+    border: 1px solid #d93025;
+
+    background: transparent;
+    color: #d93025;
+}
+
 .primary-button:active,
 .secondary-button:active,
-.action-card:active {
+.danger-button:active,
+.action-card:active,
+.choice-button:active {
     transform: scale(0.98);
 }
 
@@ -140,7 +156,7 @@ h1 {
 }
 
 
-/* Profile form */
+/* Profile */
 
 .form {
     width: 100%;
@@ -152,8 +168,7 @@ h1 {
     text-align: left;
 }
 
-.form label,
-.form-label {
+.form label {
     margin: 14px 0 8px;
 
     font-size: 14px;
@@ -185,46 +200,6 @@ h1 {
 .form input:focus {
     border-color:
         var(--tg-theme-button-color, #2481cc);
-}
-
-
-/* Interests */
-
-.interests {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    margin-bottom: 8px;
-}
-
-.interest-button {
-    padding: 10px 12px;
-
-    border:
-        1px solid
-        var(--tg-theme-hint-color, #d0d0d0);
-
-    border-radius: 20px;
-
-    background: transparent;
-
-    color:
-        var(--tg-theme-text-color, #111111);
-
-    cursor: pointer;
-}
-
-.interest-button.selected {
-    border-color:
-        var(--tg-theme-button-color, #2481cc);
-
-    background:
-        var(--tg-theme-button-color, #2481cc);
-
-    color:
-        var(--tg-theme-button-text-color, #ffffff);
 }
 
 
@@ -264,6 +239,10 @@ h1 {
 
     color:
         var(--tg-theme-hint-color, #707579);
+}
+
+.home-state {
+    width: 100%;
 }
 
 .home-actions {
@@ -308,6 +287,7 @@ h1 {
 }
 
 .action-icon {
+    flex-shrink: 0;
     font-size: 32px;
 }
 
@@ -331,13 +311,12 @@ h1 {
 }
 
 
-/* Home information */
+/* Home info */
 
 .home-info {
     width: 100%;
 
     margin-top: 24px;
-
     padding: 16px;
 
     border-radius: 16px;
@@ -360,18 +339,241 @@ h1 {
 }
 
 
-/* Smaller screens */
+/* Active availability */
+
+.availability-status {
+    width: 100%;
+
+    margin-bottom: 16px;
+    padding: 20px;
+
+    border: 1px solid #34a853;
+    border-radius: 18px;
+
+    text-align: left;
+
+    background:
+        var(--tg-theme-secondary-bg-color, #f4f4f5);
+}
+
+.status-title {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 14px;
+
+    font-size: 18px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: #34a853;
+}
+
+.status-activities {
+    margin: 0 0 8px;
+
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.status-time {
+    margin: 0;
+
+    font-size: 14px;
+
+    color:
+        var(--tg-theme-hint-color, #707579);
+}
+
+.status-actions {
+    margin-top: 18px;
+}
+
+.status-actions .secondary-button,
+.status-actions .danger-button {
+    max-width: none;
+}
+
+
+/* Availability screen */
+
+.availability-content {
+    justify-content: flex-start;
+    align-items: stretch;
+
+    padding-bottom: 24px;
+
+    text-align: left;
+}
+
+.back-button {
+    align-self: flex-start;
+
+    margin: 0 0 24px;
+    padding: 8px 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color:
+        var(--tg-theme-button-color, #2481cc);
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.availability-heading {
+    text-align: center;
+}
+
+.availability-icon {
+    margin-bottom: 10px;
+    font-size: 48px;
+}
+
+.availability-heading .subtitle {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.availability-form {
+    width: 100%;
+}
+
+.section-label {
+    display: block;
+
+    margin: 24px 0 8px;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.section-hint {
+    margin: -2px 0 12px;
+
+    font-size: 13px;
+
+    color:
+        var(--tg-theme-hint-color, #707579);
+}
+
+
+/* Activities */
+
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+.choice-button {
+    min-height: 48px;
+
+    padding: 11px 12px;
+
+    border:
+        1px solid
+        var(--tg-theme-hint-color, #d0d0d0);
+
+    border-radius: 14px;
+
+    background: transparent;
+
+    color:
+        var(--tg-theme-text-color, #111111);
+
+    font-size: 15px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.choice-button.selected {
+    border-color:
+        var(--tg-theme-button-color, #2481cc);
+
+    background:
+        var(--tg-theme-button-color, #2481cc);
+
+    color:
+        var(--tg-theme-button-text-color, #ffffff);
+}
+
+
+/* Start time */
+
+.time-options {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.time-button {
+    width: 100%;
+    text-align: left;
+}
+
+
+/* Until */
+
+.time-input {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border:
+        1px solid
+        var(--tg-theme-hint-color, #d0d0d0);
+
+    border-radius: 14px;
+
+    background:
+        var(--tg-theme-secondary-bg-color, #f4f4f5);
+
+    color:
+        var(--tg-theme-text-color, #111111);
+
+    font-size: 17px;
+
+    outline: none;
+}
+
+.time-input:focus {
+    border-color:
+        var(--tg-theme-button-color, #2481cc);
+}
+
+.availability-submit {
+    max-width: none;
+}
+
+
+/* Small screens */
 
 @media (max-height: 700px) {
     .screen-content {
         justify-content: flex-start;
+
         padding-top: 24px;
         padding-bottom: 24px;
     }
 
     .logo {
-        font-size: 48px;
         margin-bottom: 12px;
+        font-size: 48px;
     }
 
     h1 {

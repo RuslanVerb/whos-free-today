@@ -17,130 +17,136 @@
 
 <body>
 
-    <main class="app">
+<main class="app">
 
-        <!-- Welcome -->
-        <section id="welcome-screen" class="screen active">
-            <div class="screen-content">
+    <!-- Welcome -->
+    <section id="welcome-screen" class="screen active">
+        <div class="screen-content">
 
-                <div class="logo">👋</div>
+            <div class="logo">👋</div>
 
-                <h1>Who's Free Today?</h1>
+            <h1>Who's Free Today?</h1>
 
-                <p class="subtitle">
-                    Знайди людей поруч, які теж вільні сьогодні.
-                </p>
+            <p class="subtitle">
+                Знайди людей поруч, які теж вільні сьогодні.
+            </p>
 
-                <button id="start-button" class="primary-button">
-                    🟢 Почати
+            <button id="start-button" class="primary-button">
+                🟢 Почати
+            </button>
+
+        </div>
+    </section>
+
+
+    <!-- Location -->
+    <section id="location-screen" class="screen">
+        <div class="screen-content">
+
+            <div class="logo">📍</div>
+
+            <h1>Де ти зараз?</h1>
+
+            <p class="subtitle">
+                Локація допоможе знайти людей поблизу.
+                Точну адресу ми не показуватимемо.
+            </p>
+
+            <button id="location-button" class="primary-button">
+                📍 Використати мою локацію
+            </button>
+
+            <button id="city-button" class="secondary-button">
+                🌍 Обрати місто вручну
+            </button>
+
+        </div>
+    </section>
+
+
+    <!-- Profile -->
+    <section id="profile-screen" class="screen">
+        <div class="screen-content">
+
+            <div class="logo">👤</div>
+
+            <h1>Розкажи про себе</h1>
+
+            <p class="subtitle">
+                Ще трохи — і можна шукати людей поруч.
+            </p>
+
+            <div class="form">
+
+                <label for="name-input">
+                    Ім'я
+                </label>
+
+                <input
+                    id="name-input"
+                    type="text"
+                    placeholder="Твоє ім'я"
+                    maxlength="50"
+                >
+
+                <label for="age-input">
+                    Вік
+                </label>
+
+                <input
+                    id="age-input"
+                    type="number"
+                    placeholder="Наприклад, 25"
+                    min="18"
+                    max="100"
+                >
+
+                <p
+                    id="profile-error"
+                    class="error-message"
+                ></p>
+
+                <button
+                    id="save-profile-button"
+                    class="primary-button"
+                >
+                    Продовжити →
                 </button>
 
             </div>
-        </section>
+
+        </div>
+    </section>
 
 
-        <!-- Location -->
-        <section id="location-screen" class="screen">
-            <div class="screen-content">
+    <!-- Home -->
+    <section id="home-screen" class="screen">
+        <div class="screen-content">
 
-                <div class="logo">📍</div>
+            <div class="home-header">
 
-                <h1>Де ти зараз?</h1>
+                <div>
+                    <p class="home-label">
+                        WHO'S FREE TODAY?
+                    </p>
 
-                <p class="subtitle">
-                    Локація допоможе знайти людей поблизу.
-                    Точну адресу ми не показуватимемо.
-                </p>
-
-                <button id="location-button" class="primary-button">
-                    📍 Використати мою локацію
-                </button>
-
-                <button id="city-button" class="secondary-button">
-                    🌍 Обрати місто вручну
-                </button>
-
-            </div>
-        </section>
-
-
-        <!-- Profile -->
-        <section id="profile-screen" class="screen">
-            <div class="screen-content">
-
-                <div class="logo">👤</div>
-
-                <h1>Розкажи про себе</h1>
-
-                <p class="subtitle">
-                    Ще трохи — і можна шукати людей поруч.
-                </p>
-
-                <div class="form">
-
-                    <label for="name-input">
-                        Ім'я
-                    </label>
-
-                    <input
-                        id="name-input"
-                        type="text"
-                        placeholder="Твоє ім'я"
-                        maxlength="50"
-                    >
-
-                    <label for="age-input">
-                        Вік
-                    </label>
-
-                    <input
-                        id="age-input"
-                        type="number"
-                        placeholder="Наприклад, 25"
-                        min="18"
-                        max="100"
-                    >
-
-                    <p
-                        id="profile-error"
-                        class="error-message"
-                    ></p>
-
-                    <button
-                        id="save-profile-button"
-                        class="primary-button"
-                    >
-                        Продовжити →
-                    </button>
-
+                    <h1 id="home-greeting">
+                        👋 Привіт!
+                    </h1>
                 </div>
 
             </div>
-        </section>
+
+            <p class="subtitle">
+                Що хочеш зробити сьогодні?
+            </p>
 
 
-        <!-- Home -->
-        <section id="home-screen" class="screen">
-
-            <div class="screen-content">
-
-                <div class="home-header">
-
-                    <div>
-                        <p class="home-label">
-                            WHO'S FREE TODAY?
-                        </p>
-
-                        <h1 id="home-greeting">
-                            👋 Привіт!
-                        </h1>
-                    </div>
-
-                </div>
-
-                <p class="subtitle">
-                    Що хочеш зробити сьогодні?
-                </p>
+            <!-- No active availability -->
+            <div
+                id="inactive-home"
+                class="home-state"
+            >
 
                 <div class="home-actions">
 
@@ -185,30 +191,286 @@
 
                 </div>
 
-                <div class="home-info">
+            </div>
 
-                    <div class="info-row">
-                        <span>📍</span>
-                        <span>Локацію визначено</span>
+
+            <!-- Active availability -->
+            <div
+                id="active-home"
+                class="home-state hidden"
+            >
+
+                <div class="availability-status">
+
+                    <div class="status-title">
+                        <span class="status-dot"></span>
+
+                        <strong>
+                            Ти вільний сьогодні
+                        </strong>
                     </div>
 
-                    <div class="info-row">
-                        <span>👤</span>
-                        <span id="profile-summary">
-                            Профіль готовий
-                        </span>
+                    <p
+                        id="active-activities"
+                        class="status-activities"
+                    ></p>
+
+                    <p
+                        id="active-time"
+                        class="status-time"
+                    ></p>
+
+                    <div class="status-actions">
+
+                        <button
+                            id="edit-availability-button"
+                            class="secondary-button"
+                        >
+                            ✏️ Змінити
+                        </button>
+
+                        <button
+                            id="stop-availability-button"
+                            class="danger-button"
+                        >
+                            Завершити
+                        </button>
+
                     </div>
 
                 </div>
 
+
+                <button
+                    id="active-discover-button"
+                    class="action-card"
+                >
+                    <span class="action-icon">
+                        👥
+                    </span>
+
+                    <span class="action-text">
+                        <strong>
+                            Хто вільний поруч?
+                        </strong>
+
+                        <small>
+                            Подивись, хто доступний зараз
+                        </small>
+                    </span>
+                </button>
+
             </div>
 
-        </section>
 
-    </main>
+            <div class="home-info">
 
-    <script src="/static/js/telegram.js"></script>
-    <script src="/static/js/app.js"></script>
+                <div class="info-row">
+                    <span>📍</span>
+                    <span>Локацію визначено</span>
+                </div>
+
+                <div class="info-row">
+                    <span>👤</span>
+
+                    <span id="profile-summary">
+                        Профіль готовий
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- Availability -->
+    <section id="availability-screen" class="screen">
+        <div class="screen-content availability-content">
+
+            <button
+                id="availability-back-button"
+                class="back-button"
+            >
+                ← Назад
+            </button>
+
+            <div class="availability-heading">
+
+                <div class="availability-icon">
+                    🟢
+                </div>
+
+                <h1>
+                    Я вільний сьогодні
+                </h1>
+
+                <p class="subtitle">
+                    Розкажи, що тобі хотілося б робити.
+                </p>
+
+            </div>
+
+
+            <div class="availability-form">
+
+                <p class="section-label">
+                    Що хочеш робити?
+                </p>
+
+                <p class="section-hint">
+                    Можна обрати кілька варіантів
+                </p>
+
+
+                <div id="activities" class="activity-grid">
+
+                    <button
+                        type="button"
+                        class="choice-button activity-button"
+                        data-activity="coffee"
+                        data-label="☕ Кава"
+                    >
+                        ☕ Кава
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button activity-button"
+                        data-activity="bar"
+                        data-label="🍺 Бар"
+                    >
+                        🍺 Бар
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button activity-button"
+                        data-activity="walk"
+                        data-label="🚶 Прогулянка"
+                    >
+                        🚶 Прогулянка
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button activity-button"
+                        data-activity="food"
+                        data-label="🍕 Поїсти"
+                    >
+                        🍕 Поїсти
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button activity-button"
+                        data-activity="cinema"
+                        data-label="🎬 Кіно"
+                    >
+                        🎬 Кіно
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button activity-button"
+                        data-activity="sport"
+                        data-label="🏃 Спорт"
+                    >
+                        🏃 Спорт
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button activity-button"
+                        data-activity="games"
+                        data-label="🎮 Ігри"
+                    >
+                        🎮 Ігри
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button activity-button"
+                        data-activity="chat"
+                        data-label="💬 Поспілкуватися"
+                    >
+                        💬 Поспілкуватися
+                    </button>
+
+                </div>
+
+
+                <p class="section-label">
+                    Коли?
+                </p>
+
+                <div class="time-options">
+
+                    <button
+                        type="button"
+                        class="choice-button time-button"
+                        data-start="now"
+                    >
+                        ⚡ Зараз
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button time-button"
+                        data-start="hour"
+                    >
+                        🕐 Через годину
+                    </button>
+
+                    <button
+                        type="button"
+                        class="choice-button time-button"
+                        data-start="evening"
+                    >
+                        🌆 Сьогодні ввечері
+                    </button>
+
+                </div>
+
+
+                <label
+                    for="available-until"
+                    class="section-label"
+                >
+                    До котрої години?
+                </label>
+
+                <input
+                    id="available-until"
+                    class="time-input"
+                    type="time"
+                    value="22:00"
+                >
+
+
+                <p
+                    id="availability-error"
+                    class="error-message"
+                ></p>
+
+
+                <button
+                    id="save-availability-button"
+                    class="primary-button availability-submit"
+                >
+                    🟢 Стати доступним
+                </button>
+
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+
+<script src="/static/js/telegram.js"></script>
+<script src="/static/js/app.js"></script>
 
 </body>
 </html>
