@@ -56,9 +56,10 @@ const activeTime =
     document.getElementById("active-time");
 
 
-// Temporary app state.
-// Profile is now saved in PostgreSQL.
-// Availability will be moved to PostgreSQL later.
+// -------------------------
+// App state
+// -------------------------
+
 const appState = {
     location: null,
     profile: null,
@@ -99,18 +100,26 @@ startButton.addEventListener("click", () => {
 
 locationButton.addEventListener("click", () => {
     if (!navigator.geolocation) {
-        alert("Геолокація не підтримується на цьому пристрої.");
+        alert(
+            "Геолокація не підтримується на цьому пристрої."
+        );
+
         return;
     }
 
     locationButton.disabled = true;
-    locationButton.textContent = "📍 Визначаємо локацію...";
+
+    locationButton.textContent =
+        "📍 Визначаємо локацію...";
 
     navigator.geolocation.getCurrentPosition(
         (position) => {
             appState.location = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
+                latitude:
+                    position.coords.latitude,
+
+                longitude:
+                    position.coords.longitude,
             };
 
             console.log(
@@ -135,7 +144,10 @@ locationButton.addEventListener("click", () => {
             locationButton.textContent =
                 "📍 Використати мою локацію";
 
-            if (error.code === error.PERMISSION_DENIED) {
+            if (
+                error.code ===
+                error.PERMISSION_DENIED
+            ) {
                 alert(
                     "Доступ до геолокації заборонено. " +
                     "Дозволь доступ або обери місто вручну."
@@ -144,7 +156,10 @@ locationButton.addEventListener("click", () => {
                 return;
             }
 
-            if (error.code === error.POSITION_UNAVAILABLE) {
+            if (
+                error.code ===
+                error.POSITION_UNAVAILABLE
+            ) {
                 alert(
                     "Не вдалося визначити твою локацію. " +
                     "Спробуй ще раз або обери місто вручну."
@@ -153,7 +168,10 @@ locationButton.addEventListener("click", () => {
                 return;
             }
 
-            if (error.code === error.TIMEOUT) {
+            if (
+                error.code ===
+                error.TIMEOUT
+            ) {
                 alert(
                     "Визначення локації зайняло забагато часу. " +
                     "Спробуй ще раз."
@@ -194,10 +212,17 @@ cityButton.addEventListener("click", () => {
 
 function openProfileScreen() {
     const telegramUser =
-        window.Telegram?.WebApp?.initDataUnsafe?.user;
+        window.Telegram
+            ?.WebApp
+            ?.initDataUnsafe
+            ?.user;
 
-    if (telegramUser?.first_name && !nameInput.value) {
-        nameInput.value = telegramUser.first_name;
+    if (
+        telegramUser?.first_name &&
+        !nameInput.value
+    ) {
+        nameInput.value =
+            telegramUser.first_name;
     }
 
     profileError.textContent = "";
@@ -206,7 +231,10 @@ function openProfileScreen() {
 }
 
 
-function validateProfile(name, age) {
+function validateProfile(
+    name,
+    age
+) {
     if (!name) {
         return "Вкажи своє ім'я.";
     }
@@ -216,7 +244,10 @@ function validateProfile(name, age) {
         age < 18 ||
         age > 100
     ) {
-        return "Вкажи коректний вік від 18 до 100 років.";
+        return (
+            "Вкажи коректний вік " +
+            "від 18 до 100 років."
+        );
     }
 
     return null;
@@ -224,66 +255,133 @@ function validateProfile(name, age) {
 
 
 // -------------------------
-// Save profile to backend
+// Save profile
 // -------------------------
 
-saveProfileButton.addEventListener("click", async () => {
-    const name = nameInput.value.trim();
-    const age = Number(ageInput.value);
+saveProfileButton.addEventListener(
+    "click",
+    async () => {
+        const name =
+            nameInput.value.trim();
 
-    const validationError =
-        validateProfile(name, age);
+        const age =
+            Number(ageInput.value);
 
-    if (validationError) {
-        profileError.textContent =
-            validationError;
-
-        return;
-    }
-
-    profileError.textContent = "";
-
-    saveProfileButton.disabled = true;
-    saveProfileButton.textContent =
-        "Зберігаємо...";
-
-    try {
-        const result =
-            await window.api.saveTelegramProfile(
+        const validationError =
+            validateProfile(
                 name,
-                age,
-                appState.location
+                age
             );
 
-        appState.profile = {
-            name: result.user.name,
-            age: result.user.age,
+        if (validationError) {
+            profileError.textContent =
+                validationError;
+
+            return;
+        }
+
+        profileError.textContent = "";
+
+        saveProfileButton.disabled = true;
+
+        saveProfileButton.textContent =
+            "Зберігаємо...";
+
+        try {
+            const result =
+                await window.api
+                    .saveTelegramProfile(
+                        name,
+                        age,
+                        appState.location
+                    );
+
+            appState.profile = {
+                name:
+                    result.user.name,
+
+                age:
+                    result.user.age,
+            };
+
+            console.log(
+                "Profile saved:",
+                result.user
+            );
+
+            await loadCurrentAvailability();
+
+            openHomeScreen();
+
+        } catch (error) {
+            console.error(
+                "Profile save error:",
+                error
+            );
+
+            profileError.textContent =
+                error.message ||
+                "Не вдалося зберегти профіль.";
+
+        } finally {
+            saveProfileButton.disabled = false;
+
+            saveProfileButton.textContent =
+                "Продовжити →";
+        }
+    }
+);
+
+
+// -------------------------
+// Load current availability
+// -------------------------
+
+async function loadCurrentAvailability() {
+    try {
+        const result =
+            await window.api
+                .getCurrentAvailability();
+
+        const availability =
+            result.availability;
+
+        if (!availability) {
+            appState.availability = null;
+
+            return;
+        }
+
+        appState.availability = {
+            activities:
+                availability.activities,
+
+            start:
+                availability.start_type,
+
+            until:
+                availability.available_until,
         };
 
         console.log(
-            "Profile saved:",
-            result.user
+            "Current availability loaded:",
+            appState.availability
         );
-
-        openHomeScreen();
 
     } catch (error) {
         console.error(
-            "Profile save error:",
+            "Current availability error:",
             error
         );
 
-        profileError.textContent =
-            error.message ||
-            "Не вдалося зберегти профіль.";
+        appState.availability = null;
 
-    } finally {
-        saveProfileButton.disabled = false;
-
-        saveProfileButton.textContent =
-            "Продовжити →";
+        alert(
+            "Профіль збережено, але не вдалося " +
+            "завантажити поточний статус."
+        );
     }
-});
+}
 
 
 // -------------------------
@@ -291,7 +389,8 @@ saveProfileButton.addEventListener("click", async () => {
 // -------------------------
 
 function openHomeScreen() {
-    const profile = appState.profile;
+    const profile =
+        appState.profile;
 
     homeGreeting.textContent =
         `👋 Привіт, ${profile.name}!`;
@@ -310,23 +409,37 @@ function renderAvailabilityStatus() {
         appState.availability;
 
     if (!availability) {
-        inactiveHome.classList.remove("hidden");
-        activeHome.classList.add("hidden");
+        inactiveHome
+            .classList
+            .remove("hidden");
+
+        activeHome
+            .classList
+            .add("hidden");
 
         return;
     }
 
-    inactiveHome.classList.add("hidden");
-    activeHome.classList.remove("hidden");
+    inactiveHome
+        .classList
+        .add("hidden");
+
+    activeHome
+        .classList
+        .remove("hidden");
 
     activeActivities.textContent =
         availability.activities
-            .map((activity) => activity.label)
+            .map(
+                (activity) =>
+                    activity.label
+            )
             .join(" · ");
 
     activeTime.textContent =
-        `${getStartLabel(availability.start)} → ` +
-        `${availability.until}`;
+        `${getStartLabel(
+            availability.start
+        )} → ${availability.until}`;
 }
 
 
@@ -334,23 +447,36 @@ function renderAvailabilityStatus() {
 // Availability navigation
 // -------------------------
 
-availableButton.addEventListener("click", () => {
-    resetAvailabilityForm();
+availableButton.addEventListener(
+    "click",
+    () => {
+        resetAvailabilityForm();
 
-    showScreen(availabilityScreen);
-});
+        showScreen(
+            availabilityScreen
+        );
+    }
+);
 
 
-availabilityBackButton.addEventListener("click", () => {
-    openHomeScreen();
-});
+availabilityBackButton.addEventListener(
+    "click",
+    () => {
+        openHomeScreen();
+    }
+);
 
 
-editAvailabilityButton.addEventListener("click", () => {
-    fillAvailabilityForm();
+editAvailabilityButton.addEventListener(
+    "click",
+    () => {
+        fillAvailabilityForm();
 
-    showScreen(availabilityScreen);
-});
+        showScreen(
+            availabilityScreen
+        );
+    }
+);
 
 
 // -------------------------
@@ -358,15 +484,21 @@ editAvailabilityButton.addEventListener("click", () => {
 // -------------------------
 
 document
-    .querySelectorAll(".activity-button")
+    .querySelectorAll(
+        ".activity-button"
+    )
     .forEach((button) => {
+        button.addEventListener(
+            "click",
+            () => {
+                button
+                    .classList
+                    .toggle("selected");
 
-        button.addEventListener("click", () => {
-            button.classList.toggle("selected");
-
-            availabilityError.textContent = "";
-        });
-
+                availabilityError
+                    .textContent = "";
+            }
+        );
     });
 
 
@@ -375,22 +507,33 @@ document
 // -------------------------
 
 document
-    .querySelectorAll(".time-button")
+    .querySelectorAll(
+        ".time-button"
+    )
     .forEach((button) => {
+        button.addEventListener(
+            "click",
+            () => {
+                document
+                    .querySelectorAll(
+                        ".time-button"
+                    )
+                    .forEach((item) => {
+                        item
+                            .classList
+                            .remove(
+                                "selected"
+                            );
+                    });
 
-        button.addEventListener("click", () => {
+                button
+                    .classList
+                    .add("selected");
 
-            document
-                .querySelectorAll(".time-button")
-                .forEach((item) => {
-                    item.classList.remove("selected");
-                });
-
-            button.classList.add("selected");
-
-            availabilityError.textContent = "";
-        });
-
+                availabilityError
+                    .textContent = "";
+            }
+        );
     });
 
 
@@ -404,8 +547,11 @@ function getSelectedActivities() {
             ".activity-button.selected"
         )
     ).map((button) => ({
-        id: button.dataset.activity,
-        label: button.dataset.label,
+        id:
+            button.dataset.activity,
+
+        label:
+            button.dataset.label,
     }));
 }
 
@@ -416,28 +562,42 @@ function getSelectedStart() {
             ".time-button.selected"
         );
 
-    return selected?.dataset.start || null;
+    return (
+        selected?.dataset.start ||
+        null
+    );
 }
 
 
 function getStartLabel(start) {
     const labels = {
-        now: "⚡ Зараз",
-        hour: "🕐 Через годину",
-        evening: "🌆 Сьогодні ввечері",
+        now:
+            "⚡ Зараз",
+
+        hour:
+            "🕐 Через годину",
+
+        evening:
+            "🌆 Сьогодні ввечері",
     };
 
-    return labels[start] || start;
+    return (
+        labels[start] ||
+        start
+    );
 }
 
 
 function resetAvailabilityForm() {
     document
         .querySelectorAll(
-            ".activity-button, .time-button"
+            ".activity-button, " +
+            ".time-button"
         )
         .forEach((button) => {
-            button.classList.remove("selected");
+            button
+                .classList
+                .remove("selected");
         });
 
     const nowButton =
@@ -445,11 +605,17 @@ function resetAvailabilityForm() {
             '.time-button[data-start="now"]'
         );
 
-    nowButton.classList.add("selected");
+    if (nowButton) {
+        nowButton
+            .classList
+            .add("selected");
+    }
 
-    availableUntilInput.value = "22:00";
+    availableUntilInput.value =
+        "22:00";
 
-    availabilityError.textContent = "";
+    availabilityError.textContent =
+        "";
 }
 
 
@@ -463,21 +629,28 @@ function fillAvailabilityForm() {
         return;
     }
 
-    availability.activities.forEach((activity) => {
-        const button =
-            document.querySelector(
-                `.activity-button[data-activity="${activity.id}"]`
-            );
+    availability.activities
+        .forEach((activity) => {
+            const button =
+                document.querySelector(
+                    `.activity-button[data-activity="${activity.id}"]`
+                );
 
-        if (button) {
-            button.classList.add("selected");
-        }
-    });
+            if (button) {
+                button
+                    .classList
+                    .add("selected");
+            }
+        });
 
     document
-        .querySelectorAll(".time-button")
+        .querySelectorAll(
+            ".time-button"
+        )
         .forEach((button) => {
-            button.classList.remove("selected");
+            button
+                .classList
+                .remove("selected");
         });
 
     const startButton =
@@ -486,7 +659,9 @@ function fillAvailabilityForm() {
         );
 
     if (startButton) {
-        startButton.classList.add("selected");
+        startButton
+            .classList
+            .add("selected");
     }
 
     availableUntilInput.value =
@@ -503,16 +678,24 @@ function validateAvailability(
     start,
     until
 ) {
-    if (activities.length === 0) {
-        return "Обери хоча б одне заняття.";
+    if (
+        activities.length === 0
+    ) {
+        return (
+            "Обери хоча б одне заняття."
+        );
     }
 
     if (!start) {
-        return "Обери, коли ти будеш вільний.";
+        return (
+            "Обери, коли ти будеш вільний."
+        );
     }
 
     if (!until) {
-        return "Вкажи, до котрої години ти вільний.";
+        return (
+            "Вкажи, до котрої години ти вільний."
+        );
     }
 
     return null;
@@ -525,8 +708,7 @@ function validateAvailability(
 
 saveAvailabilityButton.addEventListener(
     "click",
-    () => {
-
+    async () => {
         const activities =
             getSelectedActivities();
 
@@ -550,20 +732,62 @@ saveAvailabilityButton.addEventListener(
             return;
         }
 
-        availabilityError.textContent = "";
+        availabilityError.textContent =
+            "";
 
-        appState.availability = {
-            activities,
-            start,
-            until,
-        };
+        saveAvailabilityButton.disabled =
+            true;
 
-        console.log(
-            "Availability created:",
-            appState.availability
-        );
+        saveAvailabilityButton.textContent =
+            "Зберігаємо...";
 
-        openHomeScreen();
+        try {
+            const result =
+                await window.api
+                    .saveAvailability(
+                        activities,
+                        start,
+                        until
+                    );
+
+            const availability =
+                result.availability;
+
+            appState.availability = {
+                activities:
+                    availability.activities,
+
+                start:
+                    availability.start_type,
+
+                until:
+                    availability.available_until,
+            };
+
+            console.log(
+                "Availability saved:",
+                appState.availability
+            );
+
+            openHomeScreen();
+
+        } catch (error) {
+            console.error(
+                "Availability save error:",
+                error
+            );
+
+            availabilityError.textContent =
+                error.message ||
+                "Не вдалося зберегти статус.";
+
+        } finally {
+            saveAvailabilityButton.disabled =
+                false;
+
+            saveAvailabilityButton.textContent =
+                "🟢 Стати доступним";
+        }
     }
 );
 
@@ -574,11 +798,44 @@ saveAvailabilityButton.addEventListener(
 
 stopAvailabilityButton.addEventListener(
     "click",
-    () => {
+    async () => {
+        stopAvailabilityButton.disabled =
+            true;
 
-        appState.availability = null;
+        stopAvailabilityButton.textContent =
+            "Завершуємо...";
 
-        renderAvailabilityStatus();
+        try {
+            await window.api
+                .stopAvailability();
+
+            appState.availability =
+                null;
+
+            renderAvailabilityStatus();
+
+            console.log(
+                "Availability stopped"
+            );
+
+        } catch (error) {
+            console.error(
+                "Stop availability error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Не вдалося завершити статус."
+            );
+
+        } finally {
+            stopAvailabilityButton.disabled =
+                false;
+
+            stopAvailabilityButton.textContent =
+                "Завершити";
+        }
     }
 );
 
@@ -589,8 +846,7 @@ stopAvailabilityButton.addEventListener(
 
 function openDiscoveryPlaceholder() {
     alert(
-        "Discovery підключимо після того, " +
-        "як додамо backend і PostgreSQL."
+        "Discovery додамо наступним етапом."
     );
 }
 

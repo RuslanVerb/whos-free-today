@@ -1,8 +1,4 @@
-async function saveTelegramProfile(
-    name,
-    age,
-    location
-) {
+function getTelegramInitData() {
     const telegram =
         window.Telegram?.WebApp;
 
@@ -16,8 +12,16 @@ async function saveTelegramProfile(
         );
     }
 
+    return initData;
+}
+
+
+async function apiRequest(
+    url,
+    body
+) {
     const response = await fetch(
-        "/auth/telegram",
+        url,
         {
             method: "POST",
 
@@ -25,15 +29,7 @@ async function saveTelegramProfile(
                 "Content-Type": "application/json",
             },
 
-            body: JSON.stringify({
-                init_data: initData,
-                name,
-                age,
-                latitude:
-                    location?.latitude ?? null,
-                longitude:
-                    location?.longitude ?? null,
-            }),
+            body: JSON.stringify(body),
         }
     );
 
@@ -48,7 +44,7 @@ async function saveTelegramProfile(
     if (!response.ok) {
         throw new Error(
             data.detail ||
-            "Не вдалося зберегти профіль."
+            "Помилка запиту до сервера."
         );
     }
 
@@ -56,6 +52,105 @@ async function saveTelegramProfile(
 }
 
 
+// -------------------------
+// Profile
+// -------------------------
+
+async function saveTelegramProfile(
+    name,
+    age,
+    location
+) {
+    const initData =
+        getTelegramInitData();
+
+    return apiRequest(
+        "/auth/telegram",
+        {
+            init_data: initData,
+
+            name,
+            age,
+
+            latitude:
+                location?.latitude ?? null,
+
+            longitude:
+                location?.longitude ?? null,
+        }
+    );
+}
+
+
+// -------------------------
+// Save availability
+// -------------------------
+
+async function saveAvailability(
+    activities,
+    startType,
+    availableUntil
+) {
+    const initData =
+        getTelegramInitData();
+
+    return apiRequest(
+        "/availability",
+        {
+            init_data: initData,
+
+            activities,
+
+            start_type: startType,
+
+            available_until:
+                availableUntil,
+        }
+    );
+}
+
+
+// -------------------------
+// Current availability
+// -------------------------
+
+async function getCurrentAvailability() {
+    const initData =
+        getTelegramInitData();
+
+    return apiRequest(
+        "/availability/current",
+        {
+            init_data: initData,
+        }
+    );
+}
+
+
+// -------------------------
+// Stop availability
+// -------------------------
+
+async function stopAvailability() {
+    const initData =
+        getTelegramInitData();
+
+    return apiRequest(
+        "/availability/stop",
+        {
+            init_data: initData,
+        }
+    );
+}
+
+
+// -------------------------
+// Public API
+// -------------------------
+
 window.api = {
     saveTelegramProfile,
+    saveAvailability,
+    getCurrentAvailability,
+    stopAvailability,
 };

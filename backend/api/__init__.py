@@ -12,7 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from backend.database import get_db
-from backend.models import User
+from backend.models import Availability, User
 
 
 load_dotenv()
@@ -21,11 +21,12 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
-router = APIRouter(
-    prefix="/auth",
-    tags=["auth"],
-)
+router = APIRouter()
 
+
+# -------------------------
+# Request models
+# -------------------------
 
 class TelegramAuthRequest(BaseModel):
     init_data: str
@@ -43,6 +44,44 @@ class TelegramAuthRequest(BaseModel):
     latitude: float | None = None
     longitude: float | None = None
 
+
+class TelegramRequest(BaseModel):
+    init_data: str
+
+
+class ActivityItem(BaseModel):
+    id: str = Field(
+        min_length=1,
+        max_length=50,
+    )
+
+    label: str = Field(
+        min_length=1,
+        max_length=100,
+    )
+
+
+class AvailabilityRequest(BaseModel):
+    init_data: str
+
+    activities: list[ActivityItem] = Field(
+        min_length=1,
+    )
+
+    start_type: str = Field(
+        min_length=1,
+        max_length=20,
+    )
+
+    available_until: str = Field(
+        min_length=5,
+        max_length=5,
+    )
+
+
+# -------------------------
+# Telegram validation
+# -------------------------
 
 def validate_telegram_init_data(
     init_data: str,
@@ -145,7 +184,39 @@ def validate_telegram_init_data(
     return telegram_user
 
 
-@router.post("/telegram")
+def get_user_by_init_data(
+    init_data: str,
+    db: Session,
+) -> User:
+    telegram_user = validate_telegram_init_data(
+        init_data
+    )
+
+    telegram_id = telegram_user["id"]
+
+    user = db.scalar(
+        select(User).where(
+            User.telegram_id == telegram_id
+        )
+    )
+
+    if user is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Користувача не знайдено.",
+        )
+
+    return user
+
+
+# -------------------------
+# Telegram auth / profile
+# -------------------------
+
+@router.post(
+    "/auth/telegram",
+    tags=["auth"],
+)
 def telegram_auth(
     payload: TelegramAuthRequest,
     db: Session = Depends(get_db),
@@ -192,4 +263,163 @@ def telegram_auth(
             "latitude": user.latitude,
             "longitude": user.longitude,
         },
+    }
+
+
+# -------------------------
+# Create / update availability
+# -------------------------
+
+@router.post(
+    "/availability",
+    tags=["availability"],
+)
+def save_availability(
+    payload: AvailabilityRequest,
+    db: Session = Depends(get_db),
+):
+    user = get_user_by_init_data(
+        payload.init_data,
+        db,
+    )
+
+    availability = db.scalar(
+        select(Availability).where(
+            Availability.user_id == user.id,
+            Availability.is_active.is_(True),
+        )
+    )
+
+    activities = [
+        activity.model_dump()
+        for activity in payload.activities
+    ]
+
+    if availability is None:
+        availability = Availability(
+            user_id=user.id,
+            activities=activities,
+            start_type=payload.start_type,
+            available_until=payload.available_until,
+            is_active=True,
+        )
+
+        db.add(availability)
+
+    else:
+        availability.activities = activities
+        availability.start_type = (
+            payload.start_type
+        )
+        availability.available_until = (
+            payload.available_until
+        )
+        availability.is_active = True
+
+    db.commit()
+    db.refresh(availability)
+
+    return {
+        "status": "ok",
+        "availability": {
+            "id": availability.id,
+            "activities": availability.activities,
+            "start_type": availability.start_type,
+            "available_until": (
+                availability.available_until
+            ),
+            "is_active": availability.is_active,
+        },
+    }
+
+
+# -------------------------
+# Current availability
+# -------------------------
+
+@router.post(
+    "/availability/current",
+    tags=["availability"],
+)
+def get_current_availability(
+    payload: TelegramRequest,
+    db: Session = Depends(get_db),
+):
+    user = get_user_by_init_data(
+        payload.init_data,
+        db,
+    )
+
+    availability = db.scalar(
+        select(Availability)
+        .where(
+            Availability.user_id == user.id,
+            Availability.is_active.is_(True),
+        )
+        .order_by(
+            Availability.id.desc()
+        )
+    )
+
+    if availability is None:
+        return {
+            "status": "ok",
+            "availability": None,
+        }
+
+    return {
+        "status": "ok",
+        "availability": {
+            "id": availability.id,
+            "activities": availability.activities,
+            "start_type": availability.start_type,
+            "available_until": (
+                availability.available_until
+            ),
+            "is_active": availability.is_active,
+        },
+    }
+
+
+# -------------------------
+# Stop availability
+# -------------------------
+
+@router.post(
+    "/availability/stop",
+    tags=["availability"],
+)
+def stop_availability(
+    payload: TelegramRequest,
+    db: Session = Depends(get_db),
+):
+    user = get_user_by_init_data(
+        payload.init_data,
+        db,
+    )
+
+    availability = db.scalar(
+        select(Availability)
+        .where(
+            Availability.user_id == user.id,
+            Availability.is_active.is_(True),
+        )
+        .order_by(
+            Availability.id.desc()
+        )
+    )
+
+    if availability is None:
+        return {
+            "status": "ok",
+            "availability": None,
+        }
+
+    availability.is_active = False
+
+    db.commit()
+
+    return {
+        "status": "ok",
+        "availability": None,
     }
