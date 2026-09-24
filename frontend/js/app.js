@@ -163,40 +163,16 @@ function openProfileScreen() {
 
 
 // -------------------------
-// Interests
-// -------------------------
-
-document.querySelectorAll(".interest-button").forEach((button) => {
-    button.addEventListener("click", () => {
-        button.classList.toggle("selected");
-
-        profileError.textContent = "";
-    });
-});
-
-
-// -------------------------
 // Profile validation
 // -------------------------
 
-function getSelectedInterests() {
-    return Array.from(
-        document.querySelectorAll(".interest-button.selected")
-    ).map((button) => button.textContent.trim());
-}
-
-
-function validateProfile(name, age, interests) {
+function validateProfile(name, age) {
     if (!name) {
         return "Вкажи своє ім'я.";
     }
 
     if (!Number.isInteger(age) || age < 18 || age > 100) {
         return "Вкажи коректний вік від 18 до 100 років.";
-    }
-
-    if (interests.length === 0) {
-        return "Обери хоча б один інтерес.";
     }
 
     return null;
@@ -211,10 +187,8 @@ saveProfileButton.addEventListener("click", () => {
     const name = nameInput.value.trim();
     const age = Number(ageInput.value);
 
-    const interests = getSelectedInterests();
-
     const validationError =
-        validateProfile(name, age, interests);
+        validateProfile(name, age);
 
     if (validationError) {
         profileError.textContent = validationError;
@@ -226,7 +200,6 @@ saveProfileButton.addEventListener("click", () => {
     appState.profile = {
         name,
         age,
-        interests,
     };
 
     console.log("Profile created:", appState.profile);
@@ -246,7 +219,7 @@ function openHomeScreen() {
         `👋 Привіт, ${profile.name}!`;
 
     profileSummary.textContent =
-        `${profile.age} років · ${profile.interests.length} інтересів`;
+        `${profile.age} років`;
 
     showScreen(homeScreen);
 }
@@ -258,7 +231,7 @@ function openHomeScreen() {
 
 availableButton.addEventListener("click", () => {
     alert(
-        "Наступним кроком налаштуємо статус «Я вільний сьогодні»."
+        "Наступним кроком оберемо, що ти хочеш робити сьогодні."
     );
 });
 
