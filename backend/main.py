@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from backend.api import router as auth_router
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"
@@ -13,6 +15,9 @@ app = FastAPI(
     title="Who's Free Today API",
     version="0.1.0",
 )
+
+
+app.include_router(auth_router)
 
 
 app.mount(

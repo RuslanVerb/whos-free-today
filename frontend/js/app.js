@@ -57,7 +57,8 @@ const activeTime =
 
 
 // Temporary app state.
-// Later this will come from the backend/PostgreSQL.
+// Profile is now saved in PostgreSQL.
+// Availability will be moved to PostgreSQL later.
 const appState = {
     location: null,
     profile: null,
@@ -222,7 +223,11 @@ function validateProfile(name, age) {
 }
 
 
-saveProfileButton.addEventListener("click", () => {
+// -------------------------
+// Save profile to backend
+// -------------------------
+
+saveProfileButton.addEventListener("click", async () => {
     const name = nameInput.value.trim();
     const age = Number(ageInput.value);
 
@@ -238,17 +243,46 @@ saveProfileButton.addEventListener("click", () => {
 
     profileError.textContent = "";
 
-    appState.profile = {
-        name,
-        age,
-    };
+    saveProfileButton.disabled = true;
+    saveProfileButton.textContent =
+        "Зберігаємо...";
 
-    console.log(
-        "Profile created:",
-        appState.profile
-    );
+    try {
+        const result =
+            await window.api.saveTelegramProfile(
+                name,
+                age,
+                appState.location
+            );
 
-    openHomeScreen();
+        appState.profile = {
+            name: result.user.name,
+            age: result.user.age,
+        };
+
+        console.log(
+            "Profile saved:",
+            result.user
+        );
+
+        openHomeScreen();
+
+    } catch (error) {
+        console.error(
+            "Profile save error:",
+            error
+        );
+
+        profileError.textContent =
+            error.message ||
+            "Не вдалося зберегти профіль.";
+
+    } finally {
+        saveProfileButton.disabled = false;
+
+        saveProfileButton.textContent =
+            "Продовжити →";
+    }
 });
 
 
