@@ -125,3 +125,67 @@ h1 {
 .secondary-button:active {
     transform: scale(0.98);
 }
+
+.form {
+    width: 100%;
+    max-width: 320px;
+
+    display: flex;
+    flex-direction: column;
+
+    text-align: left;
+}
+
+.form label,
+.form-label {
+    margin: 14px 0 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form input {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: 1px solid var(--tg-theme-hint-color, #d0d0d0);
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    background: var(--tg-theme-secondary-bg-color, #f4f4f5);
+    color: var(--tg-theme-text-color, #111111);
+
+    outline: none;
+}
+
+.form input:focus {
+    border-color: var(--tg-theme-button-color, #2481cc);
+}
+
+.interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    margin-bottom: 24px;
+}
+
+.interest-button {
+    padding: 10px 12px;
+
+    border: 1px solid var(--tg-theme-hint-color, #d0d0d0);
+    border-radius: 20px;
+
+    background: transparent;
+    color: var(--tg-theme-text-color, #111111);
+
+    cursor: pointer;
+}
+
+.interest-button.selected {
+    border-color: var(--tg-theme-button-color, #2481cc);
+    background: var(--tg-theme-button-color, #2481cc);
+    color: var(--tg-theme-button-text-color, #ffffff);
+}
