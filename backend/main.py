@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.api import router as api_router
 from backend.api.discovery import router as discovery_router
+from backend.api.meeting_requests import router as meeting_requests_router
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,6 +21,7 @@ app = FastAPI(
 
 app.include_router(api_router)
 app.include_router(discovery_router)
+app.include_router(meeting_requests_router)
 
 
 app.mount(

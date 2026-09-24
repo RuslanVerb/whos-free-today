@@ -189,6 +189,26 @@ async function getDiscovery(
 
 
 // -------------------------
+// Meeting request
+// -------------------------
+
+async function createMeetingRequest(
+    receiverId
+) {
+    const initData =
+        getTelegramInitData();
+
+    return apiRequest(
+        "/requests",
+        {
+            init_data: initData,
+            receiver_id: receiverId,
+        }
+    );
+}
+
+
+// -------------------------
 // Public API
 // -------------------------
 
@@ -198,4 +218,5 @@ window.api = {
     getCurrentAvailability,
     stopAvailability,
     getDiscovery,
+    createMeetingRequest,
 };

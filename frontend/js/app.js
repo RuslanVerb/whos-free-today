@@ -1202,7 +1202,8 @@ function createPersonCard(
         "click",
         () => {
             handleMeetingRequest(
-                person
+                person,
+                meetButton
             );
         }
     );
@@ -1249,13 +1250,52 @@ function formatDistance(
 
 
 // -------------------------
-// Meeting request placeholder
+// Meeting request
 // -------------------------
 
-function handleMeetingRequest(
-    person
+async function handleMeetingRequest(
+    person,
+    button
 ) {
-    alert(
-        `Наступним кроком додамо запит на зустріч з ${person.name}.`
-    );
+    button.disabled = true;
+
+    button.textContent =
+        "Надсилаємо...";
+
+    try {
+        const result =
+            await window.api
+                .createMeetingRequest(
+                    person.user_id
+                );
+
+        if (
+            result.status ===
+            "already_pending"
+        ) {
+            button.textContent =
+                "✅ Запит уже надіслано";
+
+            return;
+        }
+
+        button.textContent =
+            "✅ Запит надіслано";
+
+    } catch (error) {
+        console.error(
+            "Meeting request error:",
+            error
+        );
+
+        button.disabled = false;
+
+        button.textContent =
+            "🤝 Запропонувати зустріч";
+
+        alert(
+            error.message ||
+            "Не вдалося надіслати запит."
+        );
+    }
 }
